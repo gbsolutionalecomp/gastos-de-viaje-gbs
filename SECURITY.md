@@ -12,7 +12,7 @@ Este prototipo no debe conectarse a datos reales hasta completar la migración a
 - La API Clara permanece deshabilitada con `CLARA_SYNC_ENABLED=false` hasta aprobar el piloto.
 - No existe integración, escritura ni marcado de registros en Microsip.
 - Antes de producción: MFA para administradores, rotación de secretos, revisión de usuarios, respaldo/restauración, pruebas RLS entre dos empresas, auditoría de dependencias y bitácora de eventos.
-- La importación/exportación Excel heredada usa `xlsx`, cuyo paquete npm no ofrece corrección para dos avisos altos. Debe sustituirse o deshabilitarse antes de producción; CSV, XML y TXT no dependen de ese paquete.
+- La importación/exportación Excel heredada fue retirada; CSV, XML y TXT cubren los flujos admitidos sin depender de `xlsx`.
 
 ## Verificación mínima
 

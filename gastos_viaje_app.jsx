@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 import Papa from "papaparse";
-import * as XLSX from "xlsx";
 import TarjetasSesiones from "./src/components/TarjetasSesiones";
 
 
@@ -1252,10 +1251,7 @@ function ConfigEmpresa({ empresa, empresas, usuarioActual, onGuardar, onCrear, t
         if (texto.includes("�")) texto = new TextDecoder("iso-8859-1").decode(reader.result);
       } catch { texto = new TextDecoder("iso-8859-1").decode(reader.result); }
         filas = Papa.parse(texto, { header: true, skipEmptyLines: true }).data;
-      } else {
-        const wb = XLSX.read(reader.result, { type: "array" });
-        filas = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { raw: false });
-      }
+      } else { setAviso("Por seguridad, importa el catálogo en formato CSV."); return; }
       const norm = (r, claves) => { for (const k of Object.keys(r)) if (claves.some((c) => k.toLowerCase().includes(c))) return String(r[k]).trim(); return ""; };
       const catalogo = filas.map((r) => ({ cuenta: norm(r, ["cuenta", "código", "codigo", "no."]), nombre: norm(r, ["nombre", "descrip", "concepto"]) }))
         .filter((c) => c.cuenta);
@@ -1464,8 +1460,8 @@ function ConfigEmpresa({ empresa, empresas, usuarioActual, onGuardar, onCrear, t
       {!soloUsuarios && <div style={S.card}>
         <h3 style={{ marginTop: 0, fontSize: 15 }}>Catálogo de cuentas ({(empresa.catalogo || []).length})</h3>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "end", marginBottom: 12 }}>
-          <button style={S.btn(true)} onClick={() => refCat.current.click()}>Importar catálogo (Excel o CSV)</button>
-          <input ref={refCat} type="file" accept=".xlsx,.xls,.csv" hidden onChange={(e) => { e.target.files[0] && importarCatalogo(e.target.files[0]); e.target.value = ""; }} />
+          <button style={S.btn(true)} onClick={() => refCat.current.click()}>Importar catálogo CSV</button>
+          <input ref={refCat} type="file" accept=".csv,text/csv" hidden onChange={(e) => { e.target.files[0] && importarCatalogo(e.target.files[0]); e.target.value = ""; }} />
           <Campo label="Cuenta"><input style={{ ...S.input, width: 130, fontFamily: "ui-monospace,monospace" }} value={cta.cuenta} onChange={(e) => setCta({ ...cta, cuenta: e.target.value })} placeholder="6400.20.1" /></Campo>
           <Campo label="Nombre"><input style={{ ...S.input, width: 240 }} value={cta.nombre} onChange={(e) => setCta({ ...cta, nombre: e.target.value })} placeholder="Gastos de transporte" /></Campo>
           <button style={S.btn(false)} disabled={!cta.cuenta.trim()}
@@ -2394,8 +2390,7 @@ function Detalle({ sol, usuario, empresa, onVolver, onActualizar, onEliminar, on
     onActualizar(nueva);
   };
 
-  const exportarExcel = () => {
-    const wb = XLSX.utils.book_new();
+  const exportarCSV = () => {
     const movs = (sol.movimientos || []).map((m) => ({
       Origen: m.origen === "clara" ? "Tarjeta Clara" : m.origen === "clara-reembolso" ? "Reembolso Clara" : "Externo", Fecha: m.fecha, Concepto: m.concepto,
       "Categoría": m.categoria, "Cuenta contable": cuentaDe(m, empresa, sol), "Centro de costos": sol.cc || "", Subtotal: m.subtotal, IVA: m.iva, Total: m.total,
@@ -2403,27 +2398,10 @@ function Detalle({ sol, usuario, empresa, onVolver, onActualizar, onEliminar, on
       "¿Reembolso?": m.reembolso ? "Sí" : "No",
       "Aprobación Clara": m.aprobacionClara || "", "Comentarios": m.comentarioClara || "",
     }));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(movs), "Movimientos");
-    const resumen = CATS.map((c) => ({
-      "Categoría": c, Presupuestado: t.porCat[c].presupuesto, Comprobado: t.porCat[c].comprobado,
-      "Variación": t.porCat[c].presupuesto - t.porCat[c].comprobado,
-    }));
-    resumen.push({ "Categoría": "TOTAL", Presupuestado: t.presupuestoTotal, Comprobado: t.total, "Variación": t.presupuestoTotal - t.total });
-    resumen.push({}, { "Categoría": "Total a reembolsar", Comprobado: t.reembolso },
-      { "Categoría": "Gastos no deducibles (sin CFDI)", Comprobado: t.sinFactura },
-      { "Categoría": "Saldo fondo efectivo", Comprobado: (sol.fondoEfectivo || 0) - t.efectivo });
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(resumen), "Resumen");
-    // hoja por cuenta contable (base para la póliza)
-    const porCuenta = {};
-    (sol.movimientos || []).forEach((m) => {
-      const c = cuentaDe(m, empresa, sol) || "SIN CUENTA";
-      if (!porCuenta[c]) porCuenta[c] = { Cuenta: c, Nombre: (empresa?.catalogo || []).find((x) => x.cuenta === c)?.nombre || "", "Centro de costos": sol.cc || "", Subtotal: 0, IVA: 0, Total: 0 };
-      porCuenta[c].Subtotal += Number(m.subtotal) || 0;
-      porCuenta[c].IVA += Number(m.iva) || 0;
-      porCuenta[c].Total += Number(m.total) || 0;
-    });
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(Object.values(porCuenta)), "Por cuenta");
-    XLSX.writeFile(wb, `${sol.folio}_comprobacion.xlsx`);
+    const csv = Papa.unparse(movs);
+    const blob = new Blob(["\uFEFF" + csv], { type:"text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url; a.download = `${sol.folio}_comprobacion.csv`; a.click(); URL.revokeObjectURL(url);
   };
 
   if (!sol) return <div style={S.card}>Cargando expediente…</div>;
@@ -2554,7 +2532,7 @@ function Detalle({ sol, usuario, empresa, onVolver, onActualizar, onEliminar, on
         <span style={{ fontSize: 12, fontWeight: 700, color: "#54606B", textTransform: "uppercase", letterSpacing: "0.05em" }}>Reportes:</span>
         <button style={{ ...S.btn(false), fontSize: 13 }} onClick={() => setReporte("solicitud")}>PDF Solicitud</button>
         <button style={{ ...S.btn(false), fontSize: 13 }} onClick={() => setReporte("comprobacion")} disabled={!(sol.movimientos || []).length}>PDF Comprobación</button>
-        <button style={{ ...S.btn(false), fontSize: 13 }} onClick={exportarExcel} disabled={!(sol.movimientos || []).length}>Exportar Excel</button>
+        <button style={{ ...S.btn(false), fontSize: 13 }} onClick={exportarCSV} disabled={!(sol.movimientos || []).length}>Exportar CSV</button>
         {onNuevoTicket && (
           <button style={{ ...S.btn(false), fontSize: 13, marginLeft: "auto", borderColor: "#3644AC", color: "#3644AC" }}
             onClick={() => {
@@ -2597,7 +2575,7 @@ Por favor descarga el reporte PDF de la aplicación y adjúntalo a este correo.
 Saludos`);
           window.open(`mailto:${sol.autorizador ? "" : ""}?subject=Gastos ${sol.folio} — ${sol.proyecto}&body=${cuerpo}`);
         }}>{"📧"} Enviar expediente por correo</button>
-        <span style={{ fontSize: 11, color: "#8A949C" }}>Descarga el PDF → se abre tu correo → adjunta PDF, XMLs y Excel del expediente.</span>
+        <span style={{ fontSize: 11, color: "#8A949C" }}>Descarga el PDF → se abre tu correo → adjunta PDF, XMLs y CSV del expediente.</span>
       </div>
 
       <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
@@ -3052,7 +3030,6 @@ function TabComprobacion({ sol, registrar, usuario, empresa }) {
     const xmls  = lista.filter(f => f.name.endsWith(".xml"));
     const zips  = lista.filter(f => f.name.endsWith(".zip"));
     const csvs  = lista.filter(f => f.name.endsWith(".csv"));
-    const excels= lista.filter(f => f.name.match(/\.xlsx?$/i));
 
     try {
       // ZIP de Clara
@@ -3068,11 +3045,6 @@ function TabComprobacion({ sol, registrar, usuario, empresa }) {
       // CSV de Clara (tarjeta o reembolsos)
       if (csvs.length > 0) {
         await procesarCsv(csvs[0]);
-        setCargando(false); return;
-      }
-      // Excel manual
-      if (excels.length > 0) {
-        await procesarExcel(excels[0]);
         setCargando(false); return;
       }
       setAviso("Tipo de archivo no reconocido.");
@@ -3348,35 +3320,6 @@ function TabComprobacion({ sol, registrar, usuario, empresa }) {
     guardarMovs([...otros, ...nuevos], `CSV Clara: ${nuevos.length} movimientos (${rechazados} rechazados omitidos)`);
     setPanel(false);
     setAviso((() => { const aprobados = nuevos.filter(m => !m.esRechazado).length; const pagados = nuevos.filter(m => m.aprobado).length; return `✓ ${aprobados} tramitados (${pagados} ya pagados por finanzas) + ${rechazados} rechazados (saldo en contra).`; })());
-  };
-
-  // ── Excel manual ──────────────────────────────────────────
-  const procesarExcel = async (file) => {
-    const buf = await leerArchivoBinary(file);
-    const wb = XLSX.read(buf, { type: "array" });
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const data = XLSX.utils.sheet_to_json(ws);
-    if (!data.length) { setAviso("Excel vacío."); return; }
-    const nuevos = data.map(r => {
-      const get = (...keys) => { for (const k of keys) if (r[k] !== undefined && String(r[k]).trim()) return String(r[k]).trim(); return ""; };
-      const total = parseFloat(get("Total","total","TOTAL")) || 0;
-      const sub   = parseFloat(get("Subtotal","subtotal")) || total;
-      const iva   = parseFloat(get("IVA","iva")) || 0;
-      return {
-        id: uid(), origen: "manual",
-        fecha: get("Fecha","fecha") || hoy(),
-        concepto: get("Concepto","concepto","Descripción") || "Gasto",
-        categoria: detectarCategoria(get("Concepto","concepto","Descripción"), get("Categoría","categoria","Categoria")),
-        subtotal: sub, iva, total,
-        factura: ["Sí","Si","si","sí","true","1"].includes(get("Factura","factura")),
-        formaPago: get("Forma de pago","formaPago") || "Efectivo",
-        reembolso: false,
-      };
-    });
-    const otros = movs.filter(m => m.origen !== "manual");
-    guardarMovs([...otros, ...nuevos], `Excel: ${nuevos.length} gastos importados`);
-    setPanel(false);
-    setAviso(`✓ ${nuevos.length} gastos del Excel importados.`);
   };
 
   // ── Helpers ───────────────────────────────────────────────
@@ -3738,10 +3681,10 @@ function TabComprobacion({ sol, registrar, usuario, empresa }) {
 <div style={{ fontSize:28, marginBottom:6 }}>{"📁"}</div>
             <div style={{ fontWeight:700, color:"#3644AC" }}>Arrastra archivos aquí o clic para seleccionar</div>
             <div style={{ fontSize:12, color:"#54606B", marginTop:4 }}>
-              ZIP de Clara · XMLs (uno o varios) · CSV de tarjeta/reembolsos · Excel de gastos
+              ZIP de Clara · XMLs (uno o varios) · CSV de tarjeta/reembolsos
             </div>
             <input ref={refInput} type="file" hidden multiple
-              accept=".zip,.xml,.csv,.xlsx,.xls"
+              accept=".zip,.xml,.csv"
               onChange={e => { procesarArchivos(e.target.files); e.target.value=""; }} />
           </div>
 
@@ -3751,7 +3694,7 @@ function TabComprobacion({ sol, registrar, usuario, empresa }) {
               ["📦 ZIP de Clara","Exporta el ZIP de reembolsos desde Clara — incluye CSV + XMLs automáticamente"],
               ["📄 XML(s)","Sube uno o varios CFDI. Puedes asignar categoría a cada uno antes de confirmar"],
               ["📊 CSV Clara","El reporte de tarjeta o reembolsos descargado desde Clara"],
-              ["📋 Excel","Plantilla de gastos externos — descárgala desde la pestaña Solicitud"],
+              ["📋 CSV","Formato seguro para movimientos y catálogos"],
             ].map(([t,d]) => (
               <div key={t} style={{ background:"#fff", borderRadius:6, padding:"8px 10px" }}>
                 <div style={{ fontWeight:700 }}>{t}</div>
