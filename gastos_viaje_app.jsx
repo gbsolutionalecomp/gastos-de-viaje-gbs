@@ -1713,6 +1713,9 @@ function Login({ onEntrar }) {
         }
         // Sin sesión activa → revisar si hay usuarios en la app
         const lista = await cargarUsuarios(null);
+        // En producción el perfil inicial lo crea un trigger seguro después del magic link.
+        // Nunca permitir auto-promoción anónima desde el navegador.
+        if (!lista.length && enProduccion()) { setModo("inicio"); return; }
         if (!lista.length) { setModo("primer-admin"); return; }
         setModo("inicio");
       } catch { setModo("inicio"); }
