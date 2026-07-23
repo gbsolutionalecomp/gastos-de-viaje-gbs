@@ -1,8 +1,43 @@
+# Dependencies
 node_modules/
-.next/
-.env.local
-.env
-*.log
+/.pnp
+.pnp.js
 
+# Testing & Coverage
+/coverage
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
+# Next.js build output
+/.next/
+/out/
+/build/
+/dist/
+
+# Production & Local Env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System & Vercel
+.DS_Store
+*.pem
 .vercel
-.env*
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
