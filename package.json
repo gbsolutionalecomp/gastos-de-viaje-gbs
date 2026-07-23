@@ -1,0 +1,28 @@
+{
+  "name": "gastos-viaje",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@supabase/ssr": "0.12.3",
+    "@supabase/supabase-js": "^2.44.0",
+    "jspdf": "4.2.1",
+    "next": "15.5.21",
+    "papaparse": "^5.4.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "resend": "^3.2.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.4.0"
+  }
+}
