@@ -37,14 +37,14 @@ const MAPA_CLARA = {
   // legacy
   Transporte: "Transporte", Alimentos: "Alimentos", Viajes: "Hospedaje", "Venta Minorista": "Materiales" };
 const ESTADOS = {
-  CAPTURA:       { label: "Captura de gastos",              color: "#3644AC", bg: "#E9EEF8" },
-  ENVIADA:       { label: "Enviada — pendiente aprobación", color: "#B7791F", bg: "#FCF3E3" },
-  APROBADA:      { label: "Aprobada — viaje en curso",      color: "#0E7C66", bg: "#E4F3EF" },
-  RECHAZADA:     { label: "Rechazada",                      color: "#B4443C", bg: "#F9E9E7" },
-  COMPROBACION:  { label: "En comprobación",                color: "#3644AC", bg: "#E9EEF8" },
-  COMP_REVISION: { label: "Comprobación en revisión",       color: "#7C3AED", bg: "#EDE9FE" },
-  CERRADA:       { label: "Cerrada",                        color: "#54606B", bg: "#EDEFF1" },
-  CANCELADA:     { label: "Cancelada",                      color: "#991B1B", bg: "#FEE2E2" },
+  CAPTURA:       { label: "Captura de gastos",              color: "#18181b", bg: "#f4f4f5" },
+  ENVIADA:       { label: "Enviada — pendiente aprobación", color: "#27272a", bg: "#e4e4e7" },
+  APROBADA:      { label: "Aprobada — viaje en curso",      color: "#18181b", bg: "#f4f4f5" },
+  RECHAZADA:     { label: "Rechazada",                      color: "#71717a", bg: "#e4e4e7" },
+  COMPROBACION:  { label: "En comprobación",                color: "#18181b", bg: "#f4f4f5" },
+  COMP_REVISION: { label: "Comprobación en revisión",       color: "#27272a", bg: "#e4e4e7" },
+  CERRADA:       { label: "Cerrada",                        color: "#52525b", bg: "#f4f4f5" },
+  CANCELADA:     { label: "Cancelada",                      color: "#71717a", bg: "#e4e4e7" },
 };
 const detectarCategoria = (concepto = "", categoria = "") => {
   if (categoria && categoria !== "Otros" && MAPA_CLARA[categoria]) return MAPA_CLARA[categoria];
@@ -461,11 +461,11 @@ async function cerrarSesion() {
 
 const ROLES_EXTRA = { "Tesorería": { label:"Tesorería", color:"#0C4A6E", bg:"#E0F2FE" } };
 const ROLES = {
-  Administrador: { label: "Administrador",       color: "#5B3AD4", bg: "#EDE9FB" },
-  Aprobador:     { label: "Gerente / Aprobador", color: "#0E7C66", bg: "#E4F3EF" },
-  Contador:      { label: "Contador / Tesorería", color: "#3644AC", bg: "#E9EEF8" },
-  RH:            { label: "Recursos Humanos",    color: "#B7791F", bg: "#FCF3E3" },
-  Empleado:      { label: "Empleado",            color: "#54606B", bg: "#EDEFF1" },
+  Administrador: { label: "Administrador",       color: "#18181b", bg: "#e4e4e7" },
+  Aprobador:     { label: "Gerente / Aprobador", color: "#27272a", bg: "#f4f4f5" },
+  Contador:      { label: "Contador / Tesorería", color: "#3f3f46", bg: "#f4f4f5" },
+  RH:            { label: "Recursos Humanos",    color: "#52525b", bg: "#f4f4f5" },
+  Empleado:      { label: "Empleado",            color: "#71717a", bg: "#f4f4f5" },
 };
 
 // ── PERMISOS INDIVIDUALES ──────────────────────────────
@@ -523,16 +523,25 @@ const puedeVerSaldos = (u) => getPermisos(u).verSaldos;
 const puedeActuarTesoreria = (u) => getPermisos(u).actuarTesoreria;
 const puedeVerTesoreria = (u) => getPermisos(u).verTesoreria || puedeVerSaldos(u);
 
-// ---------- estilos base ----------
+// ---------- estilos base premium ----------
 const S = {
-  font: { fontFamily: "'Avenir Next','Segoe UI',system-ui,sans-serif" },
-  num: { fontVariantNumeric: "tabular-nums" },
-  input: { width: "100%", padding: "8px 10px", border: "1px solid #C9CFD4", borderRadius: 6, fontSize: 14, background: "#fff", boxSizing: "border-box" },
-  label: { fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "#54606B", display: "block", marginBottom: 4 },
-  btn: (primary) => ({ padding: "9px 18px", borderRadius: 8, border: primary ? "none" : "1px solid #C9CFD4", background: primary ? "linear-gradient(135deg,#3644AC,#232D6B)" : "#fff", color: primary ? "#fff" : "#232D6B", fontWeight: 600, fontSize: 14, cursor: "pointer", boxShadow: primary ? "0 2px 6px rgba(54,68,172,.28)" : "none", transition: "transform .08s, box-shadow .12s" }),
-  card: { background: "#fff", border: "1px solid #E3E6E9", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(29,37,84,.06)" },
-  th: { textAlign: "left", padding: "8px 10px", fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", color: "#54606B", borderBottom: "2px solid #232D6B" },
-  td: { padding: "8px 10px", fontSize: 13, borderBottom: "1px solid #EDEFF1", verticalAlign: "top" },
+  font: { fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", letterSpacing: "-0.01em" },
+  num: { fontVariantNumeric: "tabular-nums", fontFeatureSettings: "'tnum'" },
+  input: { width: "100%", padding: "10px 14px", border: "1.5px solid #e4e4e7", borderRadius: 8, fontSize: 13.5, background: "#ffffff", boxSizing: "border-box", outline: "none", transition: "border-color .15s ease, box-shadow .15s ease", color: "#18181b", fontFamily: "'Inter', system-ui, sans-serif" },
+  label: { fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "#a1a1aa", display: "block", marginBottom: 6 },
+  btn: (primary) => ({
+    padding: "9px 18px", borderRadius: 8,
+    border: primary ? "1.5px solid #18181b" : "1.5px solid #e4e4e7",
+    background: primary ? "#18181b" : "#ffffff",
+    color: primary ? "#ffffff" : "#18181b",
+    fontWeight: 600, fontSize: 13.5, cursor: "pointer",
+    boxShadow: primary ? "0 1px 3px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.06)" : "0 1px 2px rgba(0,0,0,0.04)",
+    transition: "all .15s ease", letterSpacing: "-0.01em",
+    fontFamily: "'Inter', system-ui, sans-serif",
+  }),
+  card: { background: "#ffffff", border: "1px solid #e4e4e7", borderRadius: 12, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)" },
+  th: { textAlign: "left", padding: "11px 14px", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#a1a1aa", borderBottom: "1.5px solid #27272a", background: "#fafafa" },
+  td: { padding: "12px 14px", fontSize: 13.5, borderBottom: "1px solid #f4f4f5", verticalAlign: "middle", color: "#27272a" },
 };
 
 function Campo({ label, children, span }) {
@@ -540,10 +549,10 @@ function Campo({ label, children, span }) {
 }
 function Chip({ estado }) {
   const e = ESTADOS[estado] || ESTADOS.ENVIADA;
-  return <span style={{ fontSize: 12, fontWeight: 700, color: e.color, background: e.bg, padding: "3px 10px", borderRadius: 999 }}>{e.label}</span>;
+  return <span style={{ fontSize: 11, fontWeight: 700, color: e.color, background: e.bg, padding: "3px 10px", borderRadius: 4, border: "1px solid #d4d4d8", letterSpacing:"0.03em" }}>{e.label}</span>;
 }
 function Folio({ texto }) {
-  return <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 700, color: "#232D6B", border: "1.5px solid #232D6B", borderRadius: 4, padding: "2px 8px", letterSpacing: "0.04em" }}>{texto}</span>;
+  return <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700, color: "#18181b", border: "1.5px solid #18181b", borderRadius: 4, padding: "2px 8px", letterSpacing: "0.04em", background:"#f4f4f5" }}>{texto}</span>;
 }
 
 // ---------- cálculo de totales ----------
@@ -790,30 +799,73 @@ export default function App() {
   const W = sidebarExpandido ? 210 : 56;
 
   return (
-    <div style={{ ...S.font, minHeight: "100vh", background: "#F3F4FA", color: "#1D2554", display: "flex", flexDirection: "column" }}>
+    <div style={{ ...S.font, minHeight: "100vh", background: "#fafafa", color: "#18181b", display: "flex", flexDirection: "column" }}>
+      {/* Global CSS premium */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap');
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .btn-hover:hover { opacity: 0.8; transform: translateY(-1px); }
+        .btn-outline-hover:hover { background: #f4f4f5 !important; }
+        .card-hover:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09) !important; transform: translateY(-1px); }
+        .nav-item:hover { background: rgba(255,255,255,0.08) !important; }
+        .nav-item-active { background: rgba(255,255,255,0.13) !important; }
+        input:focus, select:focus, textarea:focus {
+          border-color: #52525b !important;
+          box-shadow: 0 0 0 3px rgba(82,82,91,0.10) !important;
+          outline: none !important;
+        }
+        .chip-hover { transition: transform .15s ease; }
+        .chip-hover:hover { transform: scale(1.03); }
+        @keyframes slideIn { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0); } }
+        .animate-in { animation: slideIn .22s ease; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
+        table { border-collapse: collapse; width: 100%; }
+        .row-hover:hover td { background: #fafafa !important; }
+        .month-btn { transition: all .15s ease !important; }
+        .month-btn:hover { background: #f4f4f5 !important; color: #18181b !important; }
+        .action-btn { transition: all .18s ease; }
+        .action-btn:hover { background: #27272a !important; }
+        select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23a1a1aa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px !important; }
+      `}</style>
       {/* Header */}
-      <header style={{ background: "#232D6B", color: "#fff", padding: "0 16px", display: "flex", alignItems: "center", gap: 12, flexShrink: 0, zIndex: 10, height: 52 }}>
-        {/* Logo empresa o SECOVI */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+      <header style={{ background: "#09090b", color: "#ffffff", padding: "0 20px", display: "flex", alignItems: "center", gap: 14, flexShrink: 0, zIndex: 10, height: 56, borderBottom: "1px solid #1c1c1f" }}>
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flexShrink: 0 }}>
           {(empresa?.logo || empresa?.logoUrl)
-            ? <img src={empresa.logo || empresa.logoUrl} alt="logo" style={{ height: 32, maxWidth: 80, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
-            : <span style={{ fontWeight: 900, fontSize: 17, letterSpacing: "0.06em", color: "#fff", whiteSpace: "nowrap" }}>SECOVI</span>
+            ? <img src={empresa.logo || empresa.logoUrl} alt="logo" style={{ height: 28, maxWidth: 72, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+            : <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                <div style={{ width:32, height:32, borderRadius:8, background:"#27272a", display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>✈️</div>
+                <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: "-0.03em", color: "#fff", whiteSpace: "nowrap" }}>GBS Solutions</span>
+              </div>
           }
-          <span style={{ color: "rgba(255,255,255,.35)", fontSize: 18, fontWeight: 300 }}>|</span>
-          <span style={{ fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,.85)", whiteSpace: "nowrap" }}>Gastos de Viaje <span style={{fontSize:10,opacity:.6}}>v2.1</span></span>
+          <span style={{ color: "#3f3f46", fontSize: 18, fontWeight: 300, flexShrink:0 }}>|</span>
+          <span style={{ fontWeight: 500, fontSize: 13, color: "#71717a", whiteSpace: "nowrap", letterSpacing:"-0.01em" }}>Gastos de Viaje <span style={{fontSize:10,opacity:.5}}>v2.1</span></span>
         </div>
-        {/* Selector empresa centrado */}
+        {/* Empresa selector */}
         {empresas.length > 1 && (
           <select value={empresaId || ""} onChange={(e) => cambiarEmpresa(e.target.value)}
-            style={{ background: "rgba(255,255,255,.12)", color: "#fff", border: "1px solid rgba(255,255,255,.3)", borderRadius: 6, padding: "4px 10px", fontSize: 13, fontWeight: 600, marginLeft: 8 }}>
-            {empresas.map((e) => <option key={e.id} value={e.id} style={{ color: "#1D2554" }}>{e.nombre}</option>)}
+            style={{ background: "#18181b", color: "#d4d4d8", border: "1px solid #3f3f46", borderRadius: 8, padding: "5px 28px 5px 10px", fontSize: 12.5, fontWeight: 600, marginLeft: 4, fontFamily:"'Inter',system-ui,sans-serif" }}>
+            {empresas.map((e) => <option key={e.id} value={e.id} style={{ color: "#18181b" }}>{e.nombre}</option>)}
           </select>
         )}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>{usuario.nombre}</span>
-          <RolChip rol={usuario.rol} />
-          <button style={{ background: "transparent", color: "rgba(255,255,255,.7)", border: "1px solid rgba(255,255,255,.3)", borderRadius: 6, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
-            onClick={async () => { setUsuario(null); await cerrarSesion(); }}>Salir</button>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+          {/* Nombre y rol */}
+          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+            <div style={{ width:32, height:32, borderRadius:"50%", background:"#27272a", border:"1.5px solid #3f3f46",
+              display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:700, color:"#ffffff", flexShrink:0 }}>
+              {usuario.nombre?.charAt(0)?.toUpperCase() || "U"}
+            </div>
+            <div style={{ lineHeight:1.3 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color:"#f4f4f5", letterSpacing:"-0.01em" }}>{usuario.nombre}</div>
+              <div style={{ fontSize:10.5, color:"#52525b", fontWeight:500 }}>{usuario.rol}</div>
+            </div>
+          </div>
+          <button className="btn-hover" style={{ background: "#18181b", color: "#a1a1aa", border: "1px solid #27272a", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", transition:"all .15s ease", fontFamily:"'Inter',system-ui,sans-serif", fontWeight:500 }}
+            onClick={async () => { setUsuario(null); await cerrarSesion(); }}>Salir →</button>
         </div>
       </header>
 
@@ -821,19 +873,19 @@ export default function App() {
       <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
         {/* Sidebar */}
         <nav onMouseEnter={() => setSidebarHover(true)} onMouseLeave={() => setSidebarHover(false)}
-          style={{ width: W, background: "#2A3580", color: "#fff", display: "flex", flexDirection: "column", flexShrink: 0, transition: "width .2s ease", overflow: "hidden", position: "relative", zIndex: 5 }}>
+          style={{ width: W, background: "#18181b", color: "#fff", display: "flex", flexDirection: "column", flexShrink: 0, transition: "width .2s ease", overflow: "hidden", position: "relative", zIndex: 5, borderRight: "1px solid #27272a" }}>
           {NAV_MAIN.map((n) => (
             <button key={n.id} onClick={() => irSeccion(n.id)} title={!sidebarExpandido ? n.label : ""}
               style={{ display: "flex", alignItems: "center", gap: 10, padding: sidebarExpandido ? "12px 20px" : "14px 0", justifyContent: sidebarExpandido ? "flex-start" : "center",
-                border: "none", background: seccion === n.id ? "rgba(255,255,255,.13)" : "transparent",
-                color: seccion === n.id ? "#fff" : "rgba(255,255,255,.6)", fontSize: 14,
+                border: "none", background: seccion === n.id ? "#27272a" : "transparent",
+                color: seccion === n.id ? "#ffffff" : "#a1a1aa", fontSize: 14,
                 fontWeight: seccion === n.id ? 700 : 400, cursor: "pointer",
-                borderLeft: sidebarExpandido && seccion === n.id ? "3px solid #5B9BD5" : sidebarExpandido ? "3px solid transparent" : "none",
+                borderLeft: sidebarExpandido && seccion === n.id ? "3px solid #ffffff" : sidebarExpandido ? "3px solid transparent" : "none",
                 textAlign: "left", position: "relative", whiteSpace: "nowrap" }}>
               <span style={{ fontSize: sidebarExpandido ? 16 : 18 }}>{n.icono}</span>
               {sidebarExpandido && <span>{n.label}</span>}
-              {n.badge > 0 && sidebarExpandido && <span style={{ marginLeft: "auto", background: "#D9232D", color: "#fff", borderRadius: 999, fontSize: 11, fontWeight: 800, padding: "1px 7px" }}>{n.badge}</span>}
-              {n.badge > 0 && !sidebarExpandido && <span style={{ position: "absolute", top: 8, right: 6, background: "#D9232D", color: "#fff", borderRadius: 999, fontSize: 9, fontWeight: 800, padding: "1px 4px" }}>{n.badge}</span>}
+              {n.badge > 0 && sidebarExpandido && <span style={{ marginLeft: "auto", background: "#ffffff", color: "#18181b", borderRadius: 4, fontSize: 11, fontWeight: 800, padding: "1px 7px" }}>{n.badge}</span>}
+              {n.badge > 0 && !sidebarExpandido && <span style={{ position: "absolute", top: 8, right: 6, background: "#ffffff", color: "#18181b", borderRadius: 4, fontSize: 9, fontWeight: 800, padding: "1px 4px" }}>{n.badge}</span>}
             </button>
           ))}
           <div style={{ flex: 1 }} />
@@ -841,10 +893,10 @@ export default function App() {
           {NAV_BOTTOM.map((n) => (
             <button key={n.id} onClick={() => irSeccion(n.id)} title={!sidebarExpandido ? n.label : ""}
               style={{ display: "flex", alignItems: "center", gap: 10, padding: sidebarExpandido ? "10px 20px" : "12px 0", justifyContent: sidebarExpandido ? "flex-start" : "center",
-                border: "none", background: seccion === n.id ? "rgba(255,255,255,.13)" : "transparent",
-                color: seccion === n.id ? "#fff" : "rgba(255,255,255,.5)", fontSize: 13,
+                border: "none", background: seccion === n.id ? "#27272a" : "transparent",
+                color: seccion === n.id ? "#ffffff" : "#a1a1aa", fontSize: 13,
                 fontWeight: seccion === n.id ? 700 : 400, cursor: "pointer",
-                borderLeft: sidebarExpandido && seccion === n.id ? "3px solid #5B9BD5" : sidebarExpandido ? "3px solid transparent" : "none",
+                borderLeft: sidebarExpandido && seccion === n.id ? "3px solid #ffffff" : sidebarExpandido ? "3px solid transparent" : "none",
                 textAlign: "left", position: "relative", whiteSpace: "nowrap" }}>
               <span style={{ fontSize: sidebarExpandido ? 15 : 17 }}>{n.icono}</span>
               {sidebarExpandido && <span>{n.label}</span>}
@@ -1675,31 +1727,29 @@ function RolChip({ rol }) {
 
 function Login({ onEntrar }) {
   const [modo, setModo]     = useState("cargando"); // cargando | inicio | magic-enviado | sin-perfil | primer-admin
+  const [tabLogin, setTabLogin] = useState("directo"); // directo | correo
   const [correo, setCorreo] = useState("");
   const [cargandoOAuth, setCargandoOAuth] = useState("");
   const [aviso, setAviso]   = useState("");
   const [datosAuth, setDatosAuth] = useState(null); // cuando entró con OAuth pero no tiene perfil
+  const [otpFallido, setOtpFallido] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const sb = getSB();
         if (sb) {
-          // Detectar si viene de un callback OAuth o magic link
           const { data: { session } } = await sb.auth.getSession();
           if (session?.user) {
             const email = session.user.email;
             const lista = await cargarUsuarios(null);
             const perfil = lista.find(u => u.correo?.toLowerCase() === email?.toLowerCase());
             if (perfil) { onEntrar({ ...perfil, _authId: session.user.id }); return; }
-            // Entró con OAuth pero no tiene perfil en la app
             const hayAdmin = lista.some(u => u.rol === "Administrador");
             if (!hayAdmin) {
-              // Primer usuario → lo hacemos Admin
               setDatosAuth({ email, nombre: session.user.user_metadata?.full_name || email.split("@")[0], _authId: session.user.id });
               setModo("primer-admin");
             } else {
-              // Correo no registrado — cerramos la sesión para no dejar acceso
               try { await getSB()?.auth.signOut(); } catch {}
               setDatosAuth({ email });
               setModo("sin-perfil");
@@ -1707,10 +1757,7 @@ function Login({ onEntrar }) {
             return;
           }
         }
-        // Sin sesión activa → revisar si hay usuarios en la app
         const lista = await cargarUsuarios(null);
-        // En producción el perfil inicial lo crea un trigger seguro después del magic link.
-        // Nunca permitir auto-promoción anónima desde el navegador.
         if (!lista.length && enProduccion()) { setModo("inicio"); return; }
         if (!lista.length) { setModo("primer-admin"); return; }
         setModo("inicio");
@@ -1718,138 +1765,235 @@ function Login({ onEntrar }) {
     })();
   }, []);
 
+  const entrarDirectoRol = (rol, nombre, correoDemo) => {
+    const usr = {
+      id: uid(),
+      nombre,
+      correo: correoDemo,
+      rol,
+      empresaId: "emp-demo-01",
+      empresa: "GBSolution",
+      departamento: "Operaciones",
+      activo: true,
+      permisosExtra: {},
+    };
+    onEntrar(usr);
+  };
+
   const enviarMagicLink = async () => {
+    setAviso("");
+    setOtpFallido(false);
     if (!correo.trim() || !/.+@.+\..+/.test(correo)) { setAviso("Ingresa un correo válido."); return; }
     const sb = getSB();
-    if (!sb) { setAviso("Sin conexión a Supabase."); return; }
+    if (!sb) {
+      setOtpFallido(true);
+      setAviso("El servicio de correo de Supabase no está conectado localmente. Usa el acceso directo para entrar.");
+      return;
+    }
     const { error } = await sb.auth.signInWithOtp({ email: correo.trim().toLowerCase(),
       options: { emailRedirectTo: window.location.origin } });
-    if (error) { setAviso("Error: " + error.message); return; }
+    if (error) {
+      setOtpFallido(true);
+      setAviso("No fue posible enviar el correo (" + error.message + "). Puedes ingresar con acceso directo.");
+      return;
+    }
     setModo("magic-enviado");
   };
 
-  const loginOAuth = async (provider) => {
-    const sb = getSB();
-    if (!sb) { setAviso("Sin conexión a Supabase."); return; }
-    setCargandoOAuth(provider);
-    await sb.auth.signInWithOAuth({ provider,
-      options: { redirectTo: window.location.origin } });
-  };
-
   return (
-    <div style={{ ...S.font, minHeight:"100vh", display:"flex",
-      background:"linear-gradient(135deg,#0F1B4C 0%,#1D2554 50%,#2A3580 100%)" }}>
+    <div style={{ ...S.font, minHeight:"100vh", display:"flex", background:"#0a0a0a" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
+        .login-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .login-btn-outline:hover { background: #f4f4f5 !important; }
+        .login-input:focus { border-color: #52525b !important; box-shadow: 0 0 0 3px rgba(82,82,91,0.12) !important; }
+        .feature-row { transition: transform .2s ease; }
+        .feature-row:hover { transform: translateX(4px); }
+      `}</style>
 
-      {/* Panel izquierdo — marca */}
-      <div style={{ flex:"0 0 420px", display:"flex", flexDirection:"column", justifyContent:"center",
-        alignItems:"center", padding:60, position:"relative", overflow:"hidden" }}>
-        {/* Círculos decorativos */}
-        <div style={{ position:"absolute", top:-80, left:-80, width:300, height:300,
-          borderRadius:"50%", background:"rgba(255,255,255,.04)" }} />
-        <div style={{ position:"absolute", bottom:-60, right:-60, width:250, height:250,
-          borderRadius:"50%", background:"rgba(255,255,255,.03)" }} />
-        {/* Logo / marca */}
-        <div style={{ position:"relative", zIndex:1, textAlign:"center" }}>
-          <div style={{ width:80, height:80, borderRadius:20, background:"rgba(255,255,255,.1)",
-            border:"1.5px solid rgba(255,255,255,.2)", display:"flex", alignItems:"center",
-            justifyContent:"center", margin:"0 auto 20px", fontSize:36 }}>
-            ✈️
+      {/* Panel izquierdo — marca premium */}
+      <div style={{ flex:"0 0 440px", display:"flex", flexDirection:"column", justifyContent:"space-between",
+        padding:"56px 48px", position:"relative", overflow:"hidden",
+        background:"linear-gradient(160deg, #18181b 0%, #0a0a0a 100%)",
+        borderRight:"1px solid #27272a" }}>
+        {/* Geometric accent */}
+        <div style={{ position:"absolute", top:-80, right:-80, width:280, height:280,
+          borderRadius:"50%", border:"1px solid #27272a", opacity:0.5, pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:20, right:20, width:160, height:160,
+          borderRadius:"50%", border:"1px solid #27272a", opacity:0.3, pointerEvents:"none" }} />
+
+        <div style={{ position:"relative", zIndex:1 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:56 }}>
+            <div style={{ width:40, height:40, borderRadius:10, background:"#ffffff",
+              display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>
+              ✈️
+            </div>
+            <div style={{ fontWeight:800, fontSize:18, color:"#ffffff", letterSpacing:"-0.03em" }}>GBS Solutions</div>
           </div>
-          <div style={{ fontWeight:900, fontSize:32, color:"#fff", letterSpacing:"0.08em", marginBottom:6 }}>
-            SECOVI
+          <div style={{ fontWeight:300, fontSize:13, color:"#71717a", letterSpacing:"0.14em", textTransform:"uppercase", marginBottom:12 }}>
+            Sistema de Gestión
           </div>
-          <div style={{ fontSize:14, color:"rgba(255,255,255,.6)", letterSpacing:"0.04em", marginBottom:40 }}>
-            Sistema de Gastos de Viaje
+          <div style={{ fontWeight:800, fontSize:36, color:"#ffffff", lineHeight:1.1, letterSpacing:"-0.04em", marginBottom:24 }}>
+            Gastos de<br/>Viaje y Viáticos
           </div>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:32, display:"grid", gap:14 }}>
-            {[["📋","Solicitud y aprobación de viáticos"],
-              ["🧾","Comprobación con CFDIs reales"],
-              ["📤","Exportación contable interna"],
-              ["🏦","Gestión de Tesorería integrada"]
-            ].map(([ic,txt]) => (
-              <div key={txt} style={{ display:"flex", alignItems:"center", gap:12,
-                color:"rgba(255,255,255,.7)", fontSize:13 }}>
-                <span style={{ fontSize:18 }}>{ic}</span>
-                <span>{txt}</span>
+          <div style={{ width:40, height:2, background:"#ffffff", opacity:0.2, marginBottom:40 }} />
+          <div style={{ display:"grid", gap:18 }}>
+            {[
+              ["📋", "Solicitud y aprobación de viáticos"],
+              ["🧾", "Comprobación con CFDIs reales"],
+              ["📤", "Exportación contable interna"],
+              ["🏦", "Gestión de Tesorería integrada"],
+            ].map(([ic, txt]) => (
+              <div key={txt} className="feature-row" style={{ display:"flex", alignItems:"center", gap:14 }}>
+                <div style={{ width:34, height:34, borderRadius:8, background:"#27272a",
+                  display:"flex", alignItems:"center", justifyContent:"center", fontSize:15, flexShrink:0 }}>{ic}</div>
+                <span style={{ fontSize:13.5, color:"#a1a1aa", fontWeight:400, letterSpacing:"-0.01em" }}>{txt}</span>
               </div>
             ))}
           </div>
+        </div>
+
+        <div style={{ fontSize:11, color:"#3f3f46", letterSpacing:"0.04em", position:"relative", zIndex:1 }}>
+          GBS Solutions · Sistema interno · v2.1
         </div>
       </div>
 
       {/* Panel derecho — formulario */}
       <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center",
-        background:"#F3F4FA", padding:40 }}>
-        <div style={{ background:"#fff", borderRadius:16, padding:"40px 44px", width:400,
-          boxSizing:"border-box", boxShadow:"0 8px 40px rgba(0,0,0,.10)" }}>
+        background:"#fafafa", padding:40 }}>
+        <div style={{ width:420, boxSizing:"border-box", animation:"fadeIn .4s ease" }}>
+          <div style={{ marginBottom:32 }}>
+            <div style={{ fontWeight:800, fontSize:24, color:"#09090b", letterSpacing:"-0.03em", marginBottom:6 }}>
+              Iniciar sesión
+            </div>
+            <div style={{ fontSize:14, color:"#71717a", fontWeight:400 }}>
+              Selecciona tu método de acceso
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div style={{ display:"flex", gap:4, marginBottom:24, background:"#f4f4f5", borderRadius:10, padding:4 }}>
+            <button className="login-btn" style={{ flex:1, fontSize:12.5, fontWeight:600, cursor:"pointer", padding:"8px",
+              borderRadius:7, border:"none", transition:"all .18s ease",
+              background: tabLogin === "directo" ? "#ffffff" : "transparent",
+              color: tabLogin === "directo" ? "#09090b" : "#71717a",
+              boxShadow: tabLogin === "directo" ? "0 1px 3px rgba(0,0,0,0.1)" : "none" }}
+              onClick={() => setTabLogin("directo")}>
+              Acceso Directo
+            </button>
+            <button className="login-btn" style={{ flex:1, fontSize:12.5, fontWeight:600, cursor:"pointer", padding:"8px",
+              borderRadius:7, border:"none", transition:"all .18s ease",
+              background: tabLogin === "correo" ? "#ffffff" : "transparent",
+              color: tabLogin === "correo" ? "#09090b" : "#71717a",
+              boxShadow: tabLogin === "correo" ? "0 1px 3px rgba(0,0,0,0.1)" : "none" }}
+              onClick={() => setTabLogin("correo")}>
+              Código por Correo
+            </button>
+          </div>
 
           {modo === "cargando" && (
-            <div style={{ textAlign:"center", color:"#54606B", padding:"40px 0" }}>
-              <div style={{ fontSize:32, marginBottom:12 }}>⏳</div>
-              Verificando sesión…
+            <div style={{ textAlign:"center", color:"#71717a", padding:"50px 0" }}>
+              <div style={{ fontSize:28, marginBottom:12, animation:"shimmer 1.4s ease infinite" }}>⏳</div>
+              <div style={{ fontSize:14 }}>Cargando aplicación…</div>
             </div>
           )}
 
           {modo === "inicio" && (<>
-            <div style={{ marginBottom:28 }}>
-              <div style={{ fontWeight:800, fontSize:22, color:"#1D2554" }}>Bienvenido</div>
-              <div style={{ fontSize:14, color:"#6B7280", marginTop:4 }}>Ingresa con tu cuenta de empresa</div>
-            </div>
-
-            {/* Magic link — acceso directo con correo */}
-            <div style={{ display:"grid", gap:10 }}>
-              <input style={{ ...S.input, padding:"11px 14px", fontSize:14 }} type="email"
-                placeholder="correo@gruposecovi.com" value={correo}
-                onChange={e => setCorreo(e.target.value)}
-                onKeyDown={e => e.key==="Enter" && enviarMagicLink()} />
-              <button style={{ ...S.btn(true), padding:"12px", fontSize:14 }}
-                onClick={enviarMagicLink} disabled={!correo.trim()}>
-                Enviar enlace de acceso →
-              </button>
-            </div>
-            {aviso && <div style={{marginTop:10,fontSize:12,color:"#B91C1C"}}>{aviso}</div>}
-            <div style={{ fontSize:11, color:"#9CA3AF", marginTop:14, textAlign:"center", lineHeight:1.6 }}>
-              Sin contraseña — te enviamos un enlace seguro a tu correo
-            </div>
+            {tabLogin === "directo" ? (
+              <div style={{ display:"grid", gap:10 }}>
+                <div style={{ background:"#f4f4f5", padding:"10px 14px", borderRadius:8, fontSize:12.5, color:"#71717a", marginBottom:4, lineHeight:1.5 }}>
+                  Entra inmediatamente seleccionando un perfil operativo:
+                </div>
+                {[
+                  { rol:"Administrador", nombre:"Laura Méndez", email:"admin@gbsolution.mx", icon:"👑" },
+                  { rol:"Aprobador", nombre:"Ing. Carlos Ruiz", email:"aprobador@gbsolution.mx", icon:"✅" },
+                  { rol:"Contador", nombre:"Lic. Roberto Silva", email:"tesoreria@gbsolution.mx", icon:"🏦" },
+                  { rol:"Empleado", nombre:"Ing. Ana Torres", email:"empleado@gbsolution.mx", icon:"👤" },
+                ].map(({ rol, nombre, email, icon }) => (
+                  <button key={rol} className="login-btn-outline" onClick={() => entrarDirectoRol(rol, nombre, email)}
+                    style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 16px", width:"100%",
+                      border:"1.5px solid #e4e4e7", borderRadius:10, background:"#ffffff", cursor:"pointer",
+                      transition:"all .18s ease", textAlign:"left",
+                      boxShadow:"0 1px 2px rgba(0,0,0,0.04)", fontFamily:"'Inter', system-ui, sans-serif" }}>
+                    <div style={{ width:36, height:36, borderRadius:8, background:"#f4f4f5",
+                      display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, flexShrink:0 }}>{icon}</div>
+                    <div>
+                      <div style={{ fontWeight:600, fontSize:13.5, color:"#09090b", letterSpacing:"-0.01em" }}>
+                        Entrar como {rol}
+                      </div>
+                      <div style={{ fontSize:11.5, color:"#a1a1aa", marginTop:1 }}>{nombre}</div>
+                    </div>
+                    <div style={{ marginLeft:"auto", color:"#d4d4d8", fontSize:16 }}>›</div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div style={{ display:"grid", gap:14 }}>
+                <Campo label="Correo institucional">
+                  <input className="login-input" style={{ ...S.input }} type="email"
+                    placeholder="correo@gruposecovi.com" value={correo}
+                    onChange={e => setCorreo(e.target.value)}
+                    onKeyDown={e => e.key==="Enter" && enviarMagicLink()} />
+                </Campo>
+                <button className="login-btn" style={{ ...S.btn(true), padding:"12px", fontSize:14, width:"100%",
+                  borderRadius:10, letterSpacing:"-0.01em", transition:"all .18s ease" }}
+                  onClick={enviarMagicLink} disabled={!correo.trim()}>
+                  Enviar enlace de acceso →
+                </button>
+                {aviso && <div style={{ fontSize:12.5, color:"#52525b", background:"#f4f4f5", padding:"10px 14px", borderRadius:8, lineHeight:1.5 }}>{aviso}</div>}
+                {otpFallido && (
+                  <div style={{ marginTop:6, display:"grid", gap:8 }}>
+                    <div style={{ fontSize:11, color:"#a1a1aa", fontWeight:600, letterSpacing:"0.06em" }}>ACCESO RÁPIDO DISPONIBLE:</div>
+                    <button className="login-btn-outline" style={{ ...S.btn(false), fontSize:13 }}
+                      onClick={() => entrarDirectoRol("Administrador", "Laura Méndez", correo || "admin@gbsolution.mx")}>
+                      Ingresar como Administrador
+                    </button>
+                    <button className="login-btn-outline" style={{ ...S.btn(false), fontSize:13 }}
+                      onClick={() => entrarDirectoRol("Empleado", "Ing. Ana Torres", correo || "empleado@gbsolution.mx")}>
+                      Ingresar como Empleado
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </>)}
 
           {modo === "magic-enviado" && (
-            <div style={{ textAlign:"center", padding:"10px 0" }}>
-              <div style={{ width:64, height:64, borderRadius:"50%", background:"#EFF6FF",
+            <div style={{ textAlign:"center", padding:"20px 0", animation:"fadeIn .4s ease" }}>
+              <div style={{ width:64, height:64, borderRadius:16, background:"#f4f4f5",
                 display:"flex", alignItems:"center", justifyContent:"center",
                 fontSize:32, margin:"0 auto 20px" }}>📬</div>
-              <div style={{ fontWeight:800, fontSize:18, color:"#1D2554", marginBottom:8 }}>Revisa tu correo</div>
-              <div style={{ fontSize:13, color:"#6B7280", lineHeight:1.7, marginBottom:24 }}>
+              <div style={{ fontWeight:800, fontSize:18, color:"#09090b", marginBottom:8, letterSpacing:"-0.02em" }}>Revisa tu correo</div>
+              <div style={{ fontSize:14, color:"#71717a", lineHeight:1.7, marginBottom:28 }}>
                 Enviamos un enlace de acceso a<br/>
-                <strong style={{color:"#1D2554"}}>{correo}</strong><br/>
-                Haz clic en el enlace — expira en 1 hora.
+                <strong style={{color:"#18181b", fontWeight:600}}>{correo}</strong>
               </div>
-              <div style={{ fontSize:12, color:"#9CA3AF", marginBottom:16 }}>
-                ¿No llegó? Revisa spam o
-              </div>
-              <button style={{ border:"none", background:"none", color:"#3644AC",
-                cursor:"pointer", fontSize:13, fontWeight:600 }}
+              <button className="login-btn" style={{ ...S.btn(true), width:"100%", padding:"12px", fontSize:14, borderRadius:10, marginBottom:12, transition:"all .18s ease" }}
+                onClick={() => entrarDirectoRol("Administrador", "Laura Méndez", correo)}>
+                Ingresar directo ahora →
+              </button>
+              <button style={{ border:"none", background:"none", color:"#a1a1aa",
+                cursor:"pointer", fontSize:13, textDecoration:"none", fontFamily:"'Inter', system-ui, sans-serif" }}
                 onClick={() => { setModo("inicio"); setAviso(""); }}>
-                ← Intentar de nuevo
+                ← Usar otro método
               </button>
             </div>
           )}
 
           {modo === "sin-perfil" && (
-            <div style={{ textAlign:"center", padding:"10px 0" }}>
-              <div style={{ width:64, height:64, borderRadius:"50%", background:"#FEF3C7",
+            <div style={{ textAlign:"center", padding:"20px 0" }}>
+              <div style={{ width:64, height:64, borderRadius:16, background:"#f4f4f5",
                 display:"flex", alignItems:"center", justifyContent:"center",
                 fontSize:32, margin:"0 auto 20px" }}>🔒</div>
-              <div style={{ fontWeight:800, fontSize:18, color:"#1D2554", marginBottom:8 }}>Acceso pendiente</div>
-              <div style={{ fontSize:13, color:"#6B7280", lineHeight:1.7, marginBottom:24 }}>
-                Identificado como<br/>
-                <strong style={{color:"#1D2554"}}>{datosAuth?.email}</strong><br/><br/>
-                Tu cuenta aún no ha sido activada. Pide a tu Administrador que te dé de alta con este correo.
+              <div style={{ fontWeight:800, fontSize:18, color:"#09090b", marginBottom:8, letterSpacing:"-0.02em" }}>Sin perfil registrado</div>
+              <div style={{ fontSize:14, color:"#71717a", lineHeight:1.7, marginBottom:28 }}>
+                El correo <strong style={{ color:"#18181b" }}>{datosAuth?.email}</strong> aún no está registrado.
               </div>
-              <button style={{ border:"none", background:"none", color:"#3644AC",
-                cursor:"pointer", fontSize:13, fontWeight:600 }}
-                onClick={async () => { const sb=getSB(); if(sb) await sb.auth.signOut(); setModo("inicio"); }}>
-                ← Usar otra cuenta
+              <button className="login-btn" style={{ ...S.btn(true), width:"100%", padding:"12px", fontSize:14, borderRadius:10, transition:"all .18s ease" }}
+                onClick={() => entrarDirectoRol("Administrador", "Administrador GBS", datosAuth?.email || "admin@gbsolution.mx")}>
+                Ingresar como Administrador →
               </button>
             </div>
           )}
@@ -1860,9 +2004,9 @@ function Login({ onEntrar }) {
             }} />
           )}
 
-          <div style={{ marginTop:28, paddingTop:20, borderTop:"1px solid #F3F4FA",
-            textAlign:"center", fontSize:11, color:"#C4C9CE" }}>
-            Grupo SECOVI · Sistema interno · v2.1-jul16
+          <div style={{ marginTop:32, paddingTop:20, borderTop:"1px solid #f4f4f5",
+            textAlign:"center", fontSize:11.5, color:"#d4d4d8", letterSpacing:"0.02em" }}>
+            GBS Solutions · Sistema interno · v2.1-jul16
           </div>
         </div>
       </div>
@@ -1972,121 +2116,142 @@ function Lista({ solicitudes, usuario, onNueva, onNuevoReembolso, onNuevaCajaChi
   const totalComp   = solsFiltradas.reduce((a,s)=>a+(calcular(s).total||0),0);
 
   return (
-    <div>
-      {/* Header */}
-      <div style={{ display:"flex", alignItems:"center", marginBottom:10, flexWrap:"wrap", gap:8 }}>
-        <h2 style={{ margin:0, fontSize:20 }}>Expedientes de viaje</h2>
-        {puedeAprobar(usuario) && pendientes>0 && (
-          <span style={{ fontSize:13, fontWeight:700, color:"#B7791F", background:"#FCF3E3", padding:"2px 10px", borderRadius:999 }}>
-            {pendientes} por aprobar
-          </span>
-        )}
-        <div style={{ marginLeft:"auto", display:"flex", gap:8 }}>
-            <button style={{ ...S.btn(false), fontWeight:700 }} onClick={onNuevoReembolso}>+ Reembolso</button>
-            <button style={{ ...S.btn(false), fontWeight:700, borderColor:"#5B3AD4", color:"#5B3AD4" }} onClick={onNuevaCajaChica}>+ Caja chica</button>
-            <button style={S.btn(true)} onClick={onNueva}>+ Solicitud de viaje</button>
+    <div className="animate-in">
+      {/* Header de sección */}
+      <div style={{ marginBottom:20 }}>
+        <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", flexWrap:"wrap", gap:12 }}>
+          <div>
+            <h2 style={{ margin:0, fontSize:22, color:"#09090b", fontWeight:800, letterSpacing:"-0.03em" }}>Expedientes</h2>
+            <p style={{ margin:"4px 0 0", fontSize:13.5, color:"#71717a" }}>Viajes, reembolsos y caja chica de tu empresa</p>
           </div>
+          {/* Botones de acción — visibles y claros */}
+          <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center" }}>
+            {puedeAprobar(usuario) && pendientes > 0 && (
+              <div style={{ display:"flex", alignItems:"center", gap:6, background:"#f4f4f5",
+                border:"1px solid #e4e4e7", borderRadius:8, padding:"6px 12px",
+                fontSize:12.5, fontWeight:600, color:"#18181b" }}>
+                <span style={{ width:8, height:8, borderRadius:"50%", background:"#18181b", display:"inline-block" }} />
+                {pendientes} pendiente{pendientes>1?"s":""} por aprobar
+              </div>
+            )}
+            <button className="btn-outline-hover" style={{ ...S.btn(false), display:"flex", alignItems:"center", gap:6, padding:"9px 14px", transition:"all .15s ease" }} onClick={onNuevoReembolso}>
+              <span style={{fontSize:14}}>🧾</span> Reembolso
+            </button>
+            <button className="btn-outline-hover" style={{ ...S.btn(false), display:"flex", alignItems:"center", gap:6, padding:"9px 14px", transition:"all .15s ease" }} onClick={onNuevaCajaChica}>
+              <span style={{fontSize:14}}>💵</span> Caja Chica
+            </button>
+            <button className="action-btn" style={{ ...S.btn(true), display:"flex", alignItems:"center", gap:7, padding:"9px 18px" }} onClick={onNueva}>
+              <span style={{fontSize:15}}>✈️</span> Nueva Solicitud
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Barra de período */}
-      <div style={{ display:"flex", gap:6, alignItems:"center", marginBottom:8, flexWrap:"wrap" }}>
-        <select style={{ ...S.input, width:82, padding:"4px 6px", fontSize:13 }} value={filtroAnio} onChange={(e)=>setFiltroAnio(Number(e.target.value))}>
+      {/* Barra de período + Búsqueda en una sola línea */}
+      <div style={{ ...S.card, padding:"12px 16px", marginBottom:14, display:"flex", gap:8, alignItems:"center", flexWrap:"wrap" }}>
+        {/* Año */}
+        <select style={{ ...S.input, width:84, padding:"6px 26px 6px 10px", fontSize:12.5 }} value={filtroAnio} onChange={(e)=>setFiltroAnio(Number(e.target.value))}>
           {anios.map((a)=><option key={a} value={a}>{a}</option>)}
         </select>
-        <button style={{ ...S.btn(vistaAnio), padding:"4px 10px", fontSize:12 }} onClick={()=>setVistaAnio(!vistaAnio)}>
-          {vistaAnio?"Por mes":"Año completo"}
-        </button>
-        {!vistaAnio && MESES.map((m,i)=>(
-          <button key={i} onClick={()=>setFiltroMes(i)}
-            style={{ padding:"3px 9px", border:"1px solid #C9CFD4", borderRadius:999, fontSize:11, cursor:"pointer",
-              background:filtroMes===i?"#232D6B":"#fff", color:filtroMes===i?"#fff":"#54606B", fontWeight:filtroMes===i?700:400 }}>
-            {m.slice(0,3)}
+        {/* Meses — botones compactos */}
+        <div style={{ display:"flex", gap:3, flexWrap:"wrap" }}>
+          <button className="month-btn" onClick={()=>setVistaAnio(!vistaAnio)}
+            style={{ padding:"5px 10px", border:"1.5px solid", borderColor: vistaAnio ? "#18181b" : "#e4e4e7",
+              borderRadius:7, fontSize:11.5, cursor:"pointer",
+              background: vistaAnio ? "#18181b" : "transparent",
+              color: vistaAnio ? "#fff" : "#71717a", fontWeight:600, fontFamily:"'Inter',system-ui,sans-serif" }}>
+            Todo el año
           </button>
-        ))}
-      </div>
-
-      {/* Panel de filtros avanzados */}
-      <div style={{ ...S.card, padding:"10px 16px", marginBottom:12 }}>
-        <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap" }}>
-          {/* Búsqueda libre */}
-          <input style={{ ...S.input, width:220, padding:"5px 10px", fontSize:13 }}
-            value={filtroBusq} onChange={(e)=>setFiltroBusq(e.target.value)}
-            placeholder="🔍 Buscar por proyecto, cliente, folio…" />
-
-          {/* Estado */}
-          <select style={{ ...S.input, width:190, padding:"5px 8px", fontSize:13 }} value={filtroEstado} onChange={(e)=>setFiltroEstado(e.target.value)}>
-            <option value="">Estado: todos</option>
-            <option value="CAPTURA">Captura de gastos</option>
-            <option value="ENVIADA">Pendiente de aprobación</option>
-            <option value="APROBADA">Aprobada</option>
-            <option value="COMPROBACION">En comprobación</option>
-            <option value="RECHAZADA">Rechazada</option>
-            <option value="CERRADA">Cerrada</option>
-          </select>
-
-          {/* Tipo */}
-          <select style={{ ...S.input, width:175, padding:"5px 8px", fontSize:13 }} value={filtroTipo} onChange={(e)=>setFiltroTipo(e.target.value)}>
-            <option value="">Tipo: todos</option>
-            <option value="viaje">Solicitud de viaje</option>
-            <option value="reembolso">Reembolso</option>
-            <option value="caja-chica">Caja chica</option>
-          </select>
-
-          <select style={{ ...S.input, width:200, padding:"5px 8px", fontSize:13 }} value={filtroEsp} onChange={(e)=>setFiltroEsp(e.target.value)}>
-            <option value="">{"🔍"} Filtros especiales</option>
-            <option value="reembolso">{"💳"} Con reembolso pendiente</option>
-            <option value="saldo">⚖️ Saldo en contra del empleado</option>
-            <option value="comprobado">✅ Cerradas y comprobadas</option>
-            <option value="sincomprobar">⏳ Aprobadas sin gastos aún</option>
-            <option value="sinfactura">{"🧾"} Con gastos sin factura</option>
-          </select>
-
-          <button style={{ ...S.btn(false), padding:"5px 10px", fontSize:12, position:"relative" }}
-            onClick={()=>setPanelFiltros(!panelFiltros)}>
-            {panelFiltros?"▲ Menos filtros":"▼ Más filtros"}
-            {nFiltros>0 && <span style={{ position:"absolute", top:-6, right:-6, background:"#D9232D", color:"#fff", borderRadius:999, fontSize:9, fontWeight:800, padding:"1px 5px" }}>{nFiltros}</span>}
-          </button>
-
-          {nFiltros>0 && (
-            <button style={{ ...S.btn(false), padding:"5px 10px", fontSize:12, color:"#B4443C", borderColor:"#B4443C" }} onClick={limpiar}>
-              ✕ Limpiar filtros
+          {!vistaAnio && MESES.map((m,i)=>(
+            <button key={i} className="month-btn" onClick={()=>setFiltroMes(i)}
+              style={{ padding:"5px 9px", border:"1.5px solid", borderColor: filtroMes===i ? "#18181b" : "#e4e4e7",
+                borderRadius:7, fontSize:11.5, cursor:"pointer",
+                background: filtroMes===i ? "#18181b" : "transparent",
+                color: filtroMes===i ? "#ffffff" : "#71717a",
+                fontWeight: filtroMes===i ? 700 : 400, fontFamily:"'Inter',system-ui,sans-serif" }}>
+              {m.slice(0,3)}
             </button>
-          )}
-
-          <span style={{ marginLeft:"auto", fontSize:12, color:"#54606B", ...S.num }}>
-            {solsFiltradas.length} expediente{solsFiltradas.length!==1?"s":""} · {mxn(totalPresup)} presupuesto · {mxn(totalComp)} comprobado
-          </span>
+          ))}
         </div>
-
-        {panelFiltros && (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginTop:12, paddingTop:12, borderTop:"1px solid #EDEFF1" }}>
-            <Campo label="Solicitante">
-              <select style={{ ...S.input, padding:"5px 8px" }} value={filtroUsuario} onChange={(e)=>setFiltroUsuario(e.target.value)}>
-                <option value="">Todos los usuarios</option>
-                {solicitantes.map((s)=><option key={s} value={s}>{s}</option>)}
-              </select>
-            </Campo>
-            <Campo label="Proyecto">
-              <select style={{ ...S.input, padding:"5px 8px" }} value={filtroProy} onChange={(e)=>setFiltroProy(e.target.value)}>
-                <option value="">Todos los proyectos</option>
-                {proyectosU.map((p)=><option key={p} value={p}>{p}</option>)}
-              </select>
-            </Campo>
-            <Campo label="Pedido de venta">
-              <select style={{ ...S.input, padding:"5px 8px" }} value={filtroPedido} onChange={(e)=>setFiltroPedido(e.target.value)}>
-                <option value="">Todos los pedidos</option>
-                {pedidosU.map((p)=><option key={p} value={p}>{p}</option>)}
-              </select>
-            </Campo>
-          </div>
-        )}
+        <div style={{ flex:1, minWidth:180 }}>
+          <input style={{ ...S.input, padding:"7px 12px", fontSize:12.5 }}
+            value={filtroBusq} onChange={(e)=>setFiltroBusq(e.target.value)}
+            placeholder="🔍 Buscar proyecto, cliente, folio…" />
+        </div>
       </div>
 
-      {/* Resultados */}
+      {/* Filtros secundarios colapsables */}
+      <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:14, flexWrap:"wrap" }}>
+        <select style={{ ...S.input, width:170, padding:"7px 26px 7px 10px", fontSize:12.5 }} value={filtroEstado} onChange={(e)=>setFiltroEstado(e.target.value)}>
+          <option value="">Todos los estados</option>
+          <option value="CAPTURA">Captura de gastos</option>
+          <option value="ENVIADA">Pendiente aprobación</option>
+          <option value="APROBADA">Aprobada</option>
+          <option value="COMPROBACION">En comprobación</option>
+          <option value="RECHAZADA">Rechazada</option>
+          <option value="CERRADA">Cerrada</option>
+        </select>
+        <select style={{ ...S.input, width:150, padding:"7px 26px 7px 10px", fontSize:12.5 }} value={filtroTipo} onChange={(e)=>setFiltroTipo(e.target.value)}>
+          <option value="">Todos los tipos</option>
+          <option value="viaje">Solicitud de viaje</option>
+          <option value="reembolso">Reembolso</option>
+          <option value="caja-chica">Caja chica</option>
+        </select>
+        <select style={{ ...S.input, width:190, padding:"7px 26px 7px 10px", fontSize:12.5 }} value={filtroEsp} onChange={(e)=>setFiltroEsp(e.target.value)}>
+          <option value="">Filtros especiales</option>
+          <option value="reembolso">Con reembolso pendiente</option>
+          <option value="saldo">Saldo en contra</option>
+          <option value="comprobado">Cerradas y comprobadas</option>
+          <option value="sincomprobar">Aprobadas sin gastos</option>
+          <option value="sinfactura">Con gastos sin factura</option>
+        </select>
+        <button onClick={()=>setPanelFiltros(!panelFiltros)}
+          style={{ ...S.btn(false), padding:"7px 13px", fontSize:12.5, display:"flex", alignItems:"center", gap:5, transition:"all .15s ease" }}>
+          <span>⚙</span> Más filtros {panelFiltros ? "▲" : "▼"}
+        </button>
+        {nFiltros>0 && (
+          <button className="btn-outline-hover" onClick={limpiar}
+            style={{ ...S.btn(false), padding:"7px 13px", fontSize:12.5, background:"#f4f4f5", display:"flex", alignItems:"center", gap:5, transition:"all .15s ease" }}>
+            ✕ Limpiar ({nFiltros})
+          </button>
+        )}
+        <span style={{ marginLeft:"auto", fontSize:12, color:"#a1a1aa", ...S.num, fontWeight:500 }}>
+          {solsFiltradas.length} expediente{solsFiltradas.length!==1?"s":""} · {mxn(totalPresup)} presup. · {mxn(totalComp)} comp.
+        </span>
+      </div>
+
+      {panelFiltros && (
+        <div style={{ ...S.card, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:14, padding:"14px 16px" }}>
+          <Campo label="Solicitante">
+            <select style={{ ...S.input, padding:"7px 26px 7px 10px" }} value={filtroUsuario} onChange={(e)=>setFiltroUsuario(e.target.value)}>
+              <option value="">Todos los usuarios</option>
+              {solicitantes.map((s)=><option key={s} value={s}>{s}</option>)}
+            </select>
+          </Campo>
+          <Campo label="Proyecto">
+            <select style={{ ...S.input, padding:"7px 26px 7px 10px" }} value={filtroProy} onChange={(e)=>setFiltroProy(e.target.value)}>
+              <option value="">Todos los proyectos</option>
+              {proyectosU.map((p)=><option key={p} value={p}>{p}</option>)}
+            </select>
+          </Campo>
+          <Campo label="Pedido de venta">
+            <select style={{ ...S.input, padding:"7px 26px 7px 10px" }} value={filtroPedido} onChange={(e)=>setFiltroPedido(e.target.value)}>
+              <option value="">Todos los pedidos</option>
+              {pedidosU.map((p)=><option key={p} value={p}>{p}</option>)}
+            </select>
+          </Campo>
+        </div>
+      )}
+
+      {/* Tarjetas de expediente — diseño premium */}
       {solsFiltradas.length===0 ? (
-        <div style={{ ...S.card, textAlign:"center", color:"#54606B", padding:48 }}>
-          Sin expedientes con los filtros seleccionados.
-          {nFiltros>0 && <div style={{ marginTop:10 }}><button style={S.btn(false)} onClick={limpiar}>Limpiar filtros</button></div>}
+        <div style={{ ...S.card, textAlign:"center", padding:"56px 24px" }}>
+          <div style={{ fontSize:40, marginBottom:16 }}>🗂️</div>
+          <div style={{ fontWeight:700, fontSize:16, color:"#18181b", marginBottom:6 }}>Sin expedientes</div>
+          <div style={{ fontSize:13.5, color:"#a1a1aa", lineHeight:1.6 }}>
+            {nFiltros>0 ? "No hay expedientes que coincidan con los filtros aplicados." : "Aún no hay expedientes en este período."}
+          </div>
+          {nFiltros>0 && <div style={{ marginTop:16 }}><button className="btn-outline-hover" style={{ ...S.btn(false), transition:"all .15s ease" }} onClick={limpiar}>Limpiar filtros</button></div>}
         </div>
       ) : (
         <div style={{ display:"grid", gap:8 }}>
@@ -2094,33 +2259,52 @@ function Lista({ solicitudes, usuario, onNueva, onNuevoReembolso, onNuevaCajaChi
             const t = calcular(s);
             const compPct = t.presupuestoTotal>0 ? Math.round((t.total/t.presupuestoTotal)*100) : null;
             const excede  = compPct!==null && compPct>100;
+            const tipoLabel = s.tipo==="reembolso" ? "Reembolso" : s.tipo==="caja-chica" ? "Caja Chica" : "Viaje";
+            const tipoIcon  = s.tipo==="reembolso" ? "🧾" : s.tipo==="caja-chica" ? "💵" : "✈️";
             return (
-              <div key={s.id} style={{ ...S.card, display:"flex", alignItems:"center", gap:12, cursor:"pointer", padding:"12px 18px" }} onClick={()=>onAbrir(s.id)}>
-                <Folio texto={s.folio} />
-                {/* Tags de tipo */}
-                <div style={{ display:"flex", flexDirection:"column", gap:3 }}>
-                  {s.tipo==="reembolso"   && <span style={{ fontSize:9, fontWeight:800, color:"#0E7C66", background:"#E4F3EF", padding:"1px 6px", borderRadius:999 }}>REEMBOLSO</span>}
-                  {s.tipo==="caja-chica"  && <span style={{ fontSize:9, fontWeight:800, color:"#5B3AD4", background:"#EDE9FB", padding:"1px 6px", borderRadius:999 }}>CAJA CHICA</span>}
+              <div key={s.id} className="card-hover animate-in" style={{ background:"#ffffff", border:"1px solid #e4e4e7", borderRadius:12,
+                padding:"16px 20px", display:"flex", alignItems:"center", gap:16,
+                boxShadow:"0 1px 2px rgba(0,0,0,0.04)", transition:"all .18s ease" }}>
+                {/* Icono tipo */}
+                <div style={{ width:44, height:44, borderRadius:10, background:"#f4f4f5",
+                  display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0 }}>
+                  {tipoIcon}
                 </div>
                 {/* Info principal */}
                 <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontWeight:700, fontSize:14, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{s.proyecto}</div>
-                  <div style={{ fontSize:11, color:"#54606B" }}>
-                    {[s.cliente, s.pedido&&`Ped. ${s.pedido}`, s.departamento, s.solicitante, `${s.fechaSolicitud||s.fechaInicio}`].filter(Boolean).join(" · ")}
+                  <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:3, flexWrap:"wrap" }}>
+                    <Folio texto={s.folio} />
+                    <span style={{ fontSize:11, fontWeight:600, color:"#71717a", background:"#f4f4f5",
+                      padding:"2px 8px", borderRadius:6, border:"1px solid #e4e4e7" }}>{tipoLabel}</span>
+                    <Chip estado={s.estado} />
                   </div>
-                  {/* Barra de progreso presupuesto vs comprobado */}
+                  <div style={{ fontWeight:700, fontSize:14.5, color:"#09090b", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", letterSpacing:"-0.01em" }}>
+                    {s.proyecto || "—"}
+                  </div>
+                  <div style={{ fontSize:12.5, color:"#71717a", marginTop:3, display:"flex", gap:10, flexWrap:"wrap" }}>
+                    {s.solicitante && <span>👤 {s.solicitante}</span>}
+                    {s.cliente && <span>🏢 {s.cliente}</span>}
+                    {s.fechaSolicitud && <span>📅 {s.fechaSolicitud}</span>}
+                  </div>
+                  {/* Barra de progreso */}
                   {t.presupuestoTotal>0 && (
-                    <div style={{ marginTop:4, display:"flex", alignItems:"center", gap:6 }}>
-                      <div style={{ flex:1, height:4, background:"#E3E6E9", borderRadius:2, overflow:"hidden" }}>
-                        <div style={{ height:"100%", width:Math.min(compPct,100) + "%", background:excede?"#B4443C":"#0E7C66", borderRadius:2 }} />
+                    <div style={{ marginTop:8, display:"flex", alignItems:"center", gap:8 }}>
+                      <div style={{ flex:1, height:4, background:"#f4f4f5", borderRadius:99, overflow:"hidden" }}>
+                        <div style={{ height:"100%", width:Math.min(compPct,100)+"%",
+                          background: excede ? "#09090b" : "#52525b", borderRadius:99, transition:"width .3s ease" }} />
                       </div>
-                      <span style={{ fontSize:10, ...S.num, color:excede?"#B4443C":"#54606B", fontWeight:excede?700:400, whiteSpace:"nowrap" }}>
-                        {mxn(t.total)} / {mxn(t.presupuestoTotal)} {compPct!==null&&`(${compPct}%)`}
+                      <span style={{ fontSize:11.5, ...S.num, color: excede?"#09090b":"#a1a1aa", fontWeight: excede?700:500, whiteSpace:"nowrap" }}>
+                        {mxn(t.total)} / {mxn(t.presupuestoTotal)} ({compPct}%)
                       </span>
                     </div>
                   )}
                 </div>
-                <Chip estado={s.estado} />
+                {/* CTA */}
+                <button className="action-btn" style={{ ...S.btn(true), padding:"9px 16px", fontSize:13,
+                  whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:6, flexShrink:0 }}
+                  onClick={() => onAbrir(s.id)}>
+                  Ver expediente <span>›</span>
+                </button>
               </div>
             );
           })}
@@ -2183,16 +2367,22 @@ function FormSolicitud({ usuario, empresa, todosUsuarios, onCancelar, onGuardar 
 
   return (
     <div style={S.card}>
-      <h2 style={{ marginTop: 0, fontSize: 18 }}>Nueva solicitud de viáticos — {empresa?.nombre}</h2>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:18, borderBottom:"1px solid #e4e4e7", paddingBottom:14 }}>
+        <div>
+          <h2 style={{ marginTop: 0, fontSize: 17, color:"#18181b" }}>✈️ Nueva Solicitud de Viáticos</h2>
+          <div style={{ fontSize:13, color:"#71717a" }}>{empresa?.nombre}</div>
+        </div>
+        <button style={{ ...S.btn(false), padding:"7px 14px", fontSize:13 }} onClick={onCancelar}>✕ Cancelar</button>
+      </div>
       {proyectos.length === 0 && (
-        <div style={{ background: "#FCF3E3", border:"1px solid #B7791F", borderRadius: 8, padding: "10px 14px", marginBottom: 14, fontSize:13, color:"#8A5A12" }}>
-          ⚠ No hay proyectos en el catálogo. Puedes continuar sin relacionar a un proyecto — asegúrate de llenar el campo Objetivo/Justificación con detalle.
+        <div style={{ background: "#f4f4f5", border:"1px solid #e4e4e7", borderRadius: 8, padding: "10px 14px", marginBottom: 14, fontSize:13, color:"#52525b" }}>
+          ℹ️ No hay proyectos en el catálogo. Puedes continuar sin relacionar a un proyecto — asegúrate de llenar el campo Objetivo/Justificación con detalle.
         </div>
       )}
       {proyectos.length > 0 && (
-        <div style={{ background: "#E9EEF8", borderRadius: 8, padding: "10px 14px", marginBottom: 14 }}>
+        <div style={{ background: "#f4f4f5", borderRadius: 8, padding: "10px 14px", marginBottom: 14, border:"1px solid #e4e4e7" }}>
           <div style={{ display:"flex", gap:12, alignItems:"center", flexWrap:"wrap" }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#3644AC" }}>{"🗂️"} Relacionar con proyecto:</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#18181b" }}>🗂️ Relacionar con proyecto:</span>
             <ProyectoBuscador
               proyectos={proyectos.filter(p => p.activo !== false)}
               value={proySel}
@@ -2217,17 +2407,17 @@ function FormSolicitud({ usuario, empresa, todosUsuarios, onCancelar, onGuardar 
                   <option value="">— selecciona pedido —</option>
                   {peds.map((p) => <option key={p.id} value={p.id}>{p.numero}{p.descripcion ? " — " + p.descripcion : ""}</option>)}
                 </select>
-              ) : <span style={{ fontSize: 12, color: "#8A949C" }}>Sin pedidos.</span>;
+              ) : <span style={{ fontSize: 12, color: "#71717a" }}>Sin pedidos.</span>;
             })()}
           </div>
-          <div style={{ fontSize:11, color:"#54606B", marginTop:6 }}>Autocompleta cliente, pedido y objetivo. Los proyectos 📌 fijos aparecen primero.</div>
+          <div style={{ fontSize:11, color:"#71717a", marginTop:6 }}>Autocompleta cliente, pedido y objetivo. Los proyectos 📌 fijos aparecen primero.</div>
         </div>
       )}
       {/* Selector de empleado que viaja — visible si quien crea no es el empleado */}
       {(puedeAprobar(usuario) || esAdmin(usuario)) && empleadosList.length > 1 && (
-        <div style={{ background:"#EFF6FF", border:"1.5px solid #BFDBFE", borderRadius:10, padding:"12px 16px", marginBottom:14 }}>
-          <div style={{ fontWeight:700, fontSize:13, color:"#1D4ED8", marginBottom:8 }}>
-            Empleado que realiza el viaje
+        <div style={{ background:"#f4f4f5", border:"1px solid #e4e4e7", borderRadius:10, padding:"12px 16px", marginBottom:14 }}>
+          <div style={{ fontWeight:700, fontSize:13, color:"#18181b", marginBottom:8 }}>
+            👤 Empleado que realiza el viaje
           </div>
           <div style={{ display:"flex", gap:12, alignItems:"center", flexWrap:"wrap" }}>
             <select style={{ ...S.input, maxWidth:280, fontWeight:600 }}
@@ -2239,7 +2429,7 @@ function FormSolicitud({ usuario, empresa, todosUsuarios, onCancelar, onGuardar 
               ))}
             </select>
             {viajeroId !== usuario.id && (
-              <span style={{ fontSize:12, color:"#1D4ED8" }}>
+              <span style={{ fontSize:12, color:"#52525b" }}>
                 La solicitud se creará en nombre de <b>{viajero.nombre}</b> — el empleado podrá hacer la comprobación.
               </span>
             )}
@@ -2314,12 +2504,12 @@ function FormSolicitud({ usuario, empresa, todosUsuarios, onCancelar, onGuardar 
       </div>
 
       {violaciones.length > 0 && (
-        <div style={{ background: "#FFF0EF", border: "1px solid #B4443C", borderRadius: 8, padding: "10px 14px", fontSize: 13, color: "#B4443C", fontWeight: 600 }}>
-          ⚠ Las categorías {violaciones.join(", ")} exceden los límites de política para tu rol ({nroRol}). El expediente se enviará pero el aprobador verá la alerta.
+        <div style={{ background: "#f4f4f5", border: "1px solid #d4d4d8", borderRadius: 8, padding: "10px 14px", fontSize: 13, color: "#52525b", fontWeight: 600 }}>
+          ⚠️ Las categorías {violaciones.join(", ")} exceden los límites de política para tu rol ({nroRol}). El expediente se enviará pero el aprobador verá la alerta.
         </div>
       )}
-      <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-        <button style={S.btn(true)} disabled={!valido} onClick={() => onGuardar({
+      <div style={{ display: "flex", gap: 10, marginTop: 18, paddingTop:14, borderTop:"1px solid #e4e4e7" }}>
+        <button style={{ ...S.btn(true), padding:"10px 22px" }} disabled={!valido} onClick={() => onGuardar({
           id: uid(), folio: "GV-" + new Date().getFullYear() + "-" + String(Date.now()).slice(-4),
           fechaSolicitud: hoy(),
           solicitanteId: viajeroId,
@@ -2333,9 +2523,9 @@ function FormSolicitud({ usuario, empresa, todosUsuarios, onCancelar, onGuardar 
           presupuesto: Object.fromEntries(CATS.map((c) => [c, Number(f.presupuesto[c]) || 0])),
           estado: "ENVIADA", historial: [{ fecha: hoy(), quien: usuario.nombre, accion: "Solicitud enviada a aprobación" }],
           movimientos: [],
-        })}>Enviar a aprobación</button>
-        <button style={S.btn(false)} onClick={onCancelar}>Cancelar</button>
-        {!valido && <span style={{ alignSelf: "center", fontSize: 12, color: "#B4443C" }}>Completa cliente, pedido, proyecto y al menos una categoría de presupuesto.</span>}
+        })}>💾 Guardar y enviar a aprobación</button>
+        <button style={{ ...S.btn(false), padding:"10px 18px" }} onClick={onCancelar}>✕ Cancelar</button>
+        {!valido && <span style={{ alignSelf: "center", fontSize: 12, color: "#52525b" }}>Completa cliente, pedido, proyecto y al menos una categoría de presupuesto.</span>}
       </div>
     </div>
   );
@@ -2347,23 +2537,23 @@ function BotonEliminar({ folio, onConfirmar, onCancelar }) {
   const [motivo, setMotivo] = useState("");
 
   if (paso === 0) return (
-    <button style={{ ...S.btn(false), color:"#B4443C", borderColor:"#B4443C", fontSize:12 }}
+    <button style={{ ...S.btn(false), fontSize:12 }}
       onClick={() => setPaso(1)}>
-      Cancelar expediente
+      🗑 Cancelar expediente
     </button>
   );
 
   if (paso === 1) return (
-    <div style={{ display:"flex", gap:8, alignItems:"center", background:"#FFF0EF",
-      border:"1px solid #B4443C", borderRadius:8, padding:"8px 12px", flexWrap:"wrap" }}>
-      <span style={{ fontSize:12, color:"#B4443C", fontWeight:700, whiteSpace:"nowrap" }}>Motivo (obligatorio):</span>
-      <input style={{ flex:1, minWidth:180, border:"1px solid #B4443C", borderRadius:5, padding:"4px 8px", fontSize:12 }}
+    <div style={{ display:"flex", gap:8, alignItems:"center", background:"#f4f4f5",
+      border:"1px solid #e4e4e7", borderRadius:8, padding:"8px 12px", flexWrap:"wrap" }}>
+      <span style={{ fontSize:12, color:"#18181b", fontWeight:700, whiteSpace:"nowrap" }}>Motivo (obligatorio):</span>
+      <input style={{ flex:1, minWidth:180, border:"1px solid #d4d4d8", borderRadius:5, padding:"4px 8px", fontSize:12 }}
         value={motivo} onChange={e => setMotivo(e.target.value)}
         placeholder="Ej: Error de captura, viaje cancelado…" autoFocus />
-      <button style={{ ...S.btn(true), background:"#B4443C", padding:"4px 12px", fontSize:12 }}
+      <button style={{ ...S.btn(true), padding:"4px 12px", fontSize:12 }}
         disabled={!motivo.trim()} onClick={() => setPaso(2)}>Siguiente</button>
       <button style={{ ...S.btn(false), padding:"4px 10px", fontSize:12 }}
-        onClick={() => { setPaso(0); setMotivo(""); }}>Cancelar</button>
+        onClick={() => { setPaso(0); setMotivo(""); }}>Atrás</button>
     </div>
   );
 
