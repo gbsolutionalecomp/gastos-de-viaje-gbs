@@ -804,67 +804,75 @@ export default function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .btn-hover:hover { opacity: 0.8; transform: translateY(-1px); }
-        .btn-outline-hover:hover { background: #f4f4f5 !important; }
-        .card-hover:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09) !important; transform: translateY(-1px); }
-        .nav-item:hover { background: rgba(255,255,255,0.08) !important; }
-        .nav-item-active { background: rgba(255,255,255,0.13) !important; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #fafafa; color: #18181b; }
+        .btn-hover { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, opacity 0.2s ease; }
+        .btn-hover:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .btn-hover:active { transform: scale(0.97); }
+        .btn-outline-hover { transition: background 0.2s ease, transform 0.2s ease; }
+        .btn-outline-hover:hover { background: #f4f4f5 !important; transform: translateY(-1px); }
+        .card-hover { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease; border: 1px solid #e4e4e7; border-radius: 12px; }
+        .card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important; transform: translateY(-2px); }
+        .nav-item { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 8px; overflow: hidden; position: relative; }
+        .nav-item:hover { background: rgba(255,255,255,0.06) !important; color: #ffffff !important; transform: translateX(2px); }
+        .nav-item-active { background: rgba(255,255,255,0.1) !important; color: #ffffff !important; box-shadow: inset 3px 0 0 0 #3b82f6 !important; }
+        input, select, textarea { transition: border-color 0.2s ease, box-shadow 0.2s ease; border-radius: 8px; }
         input:focus, select:focus, textarea:focus {
-          border-color: #52525b !important;
-          box-shadow: 0 0 0 3px rgba(82,82,91,0.10) !important;
+          border-color: #18181b !important;
+          box-shadow: 0 0 0 3px rgba(24,24,27,0.1) !important;
           outline: none !important;
         }
-        .chip-hover { transition: transform .15s ease; }
-        .chip-hover:hover { transform: scale(1.03); }
-        @keyframes slideIn { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0); } }
-        .animate-in { animation: slideIn .22s ease; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        .chip-hover { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease; border-radius: 20px; }
+        .chip-hover:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        @keyframes slideIn { from { opacity:0; transform:translateY(12px);} to { opacity:1; transform:translateY(0); } }
+        .animate-in { animation: slideIn .35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
-        table { border-collapse: collapse; width: 100%; }
-        .row-hover:hover td { background: #fafafa !important; }
-        .month-btn { transition: all .15s ease !important; }
-        .month-btn:hover { background: #f4f4f5 !important; color: #18181b !important; }
-        .action-btn { transition: all .18s ease; }
-        .action-btn:hover { background: #27272a !important; }
-        select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23a1a1aa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px !important; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
+        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; border: 2px solid transparent; background-clip: padding-box; }
+        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        table tr { transition: background 0.2s ease; }
+        .row-hover:hover td { background: #f4f4f5 !important; }
+        .month-btn { transition: all .2s ease !important; border-radius: 8px; }
+        .month-btn:hover { background: #e4e4e7 !important; color: #18181b !important; transform: translateY(-1px); }
+        .action-btn { transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 8px; }
+        .action-btn:hover { background: #18181b !important; transform: scale(1.02); }
+        .action-btn:active { transform: scale(0.95); }
+        select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%2371717a' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px !important; }
       `}</style>
       {/* Header */}
-      <header style={{ background: "#09090b", color: "#ffffff", padding: "0 20px", display: "flex", alignItems: "center", gap: 14, flexShrink: 0, zIndex: 10, height: 56, borderBottom: "1px solid #1c1c1f" }}>
+      <header style={{ background: "rgba(9, 9, 11, 0.8)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", color: "#ffffff", padding: "0 24px", display: "flex", alignItems: "center", gap: 16, flexShrink: 0, zIndex: 10, height: 60, borderBottom: "1px solid rgba(255,255,255,0.08)", position: "sticky", top: 0 }}>
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flexShrink: 0 }}>
           {(empresa?.logo || empresa?.logoUrl)
-            ? <img src={empresa.logo || empresa.logoUrl} alt="logo" style={{ height: 28, maxWidth: 72, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
-            : <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                <div style={{ width:32, height:32, borderRadius:8, background:"#27272a", display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>✈️</div>
-                <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: "-0.03em", color: "#fff", whiteSpace: "nowrap" }}>GBS Solutions</span>
+            ? <img src={empresa.logo || empresa.logoUrl} alt="logo" style={{ height: 30, maxWidth: 80, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+            : <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                <div style={{ width:34, height:34, borderRadius:8, background:"linear-gradient(135deg, #27272a 0%, #18181b 100%)", boxShadow: "0 2px 8px rgba(0,0,0,0.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>✈️</div>
+                <span style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-0.02em", color: "#fff", whiteSpace: "nowrap" }}>GBS Solutions</span>
               </div>
           }
-          <span style={{ color: "#3f3f46", fontSize: 18, fontWeight: 300, flexShrink:0 }}>|</span>
-          <span style={{ fontWeight: 500, fontSize: 13, color: "#71717a", whiteSpace: "nowrap", letterSpacing:"-0.01em" }}>Gastos de Viaje <span style={{fontSize:10,opacity:.5}}>v2.1</span></span>
+          <span style={{ color: "rgba(255,255,255,0.15)", fontSize: 20, fontWeight: 300, flexShrink:0, marginLeft: 4 }}>|</span>
+          <span style={{ fontWeight: 600, fontSize: 14, color: "#a1a1aa", whiteSpace: "nowrap", letterSpacing:"-0.01em" }}>Gastos de Viaje <span style={{fontSize:10,opacity:.6, marginLeft: 4, background: "rgba(255,255,255,0.1)", padding: "2px 6px", borderRadius: 10}}>v2.1</span></span>
         </div>
         {/* Empresa selector */}
         {empresas.length > 1 && (
           <select value={empresaId || ""} onChange={(e) => cambiarEmpresa(e.target.value)}
-            style={{ background: "#18181b", color: "#d4d4d8", border: "1px solid #3f3f46", borderRadius: 8, padding: "5px 28px 5px 10px", fontSize: 12.5, fontWeight: 600, marginLeft: 4, fontFamily:"'Inter',system-ui,sans-serif" }}>
-            {empresas.map((e) => <option key={e.id} value={e.id} style={{ color: "#18181b" }}>{e.nombre}</option>)}
+            style={{ background: "rgba(24,24,27,0.6)", color: "#e4e4e7", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "6px 32px 6px 12px", fontSize: 13, fontWeight: 600, marginLeft: 8, fontFamily:"'Inter',system-ui,sans-serif", backdropFilter: "blur(4px)", cursor: "pointer", transition: "all 0.2s ease" }}>
+            {empresas.map((e) => <option key={e.id} value={e.id} style={{ color: "#18181b", background: "#fff" }}>{e.nombre}</option>)}
           </select>
         )}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 16 }}>
           {/* Nombre y rol */}
-          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-            <div style={{ width:32, height:32, borderRadius:"50%", background:"#27272a", border:"1.5px solid #3f3f46",
+          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+            <div style={{ width:36, height:36, borderRadius:"50%", background:"linear-gradient(135deg, #3f3f46 0%, #27272a 100%)", border:"1px solid rgba(255,255,255,0.1)", boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
               display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:700, color:"#ffffff", flexShrink:0 }}>
               {usuario.nombre?.charAt(0)?.toUpperCase() || "U"}
             </div>
-            <div style={{ lineHeight:1.3 }}>
+            <div style={{ lineHeight:1.4 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color:"#f4f4f5", letterSpacing:"-0.01em" }}>{usuario.nombre}</div>
-              <div style={{ fontSize:10.5, color:"#52525b", fontWeight:500 }}>{usuario.rol}</div>
+              <div style={{ fontSize: 11, color:"#a1a1aa", fontWeight:500 }}>{usuario.rol}</div>
             </div>
           </div>
-          <button className="btn-hover" style={{ background: "#18181b", color: "#a1a1aa", border: "1px solid #27272a", borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", transition:"all .15s ease", fontFamily:"'Inter',system-ui,sans-serif", fontWeight:500 }}
+          <button className="btn-hover" style={{ background: "rgba(255,255,255,0.05)", color: "#d4d4d8", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 14px", fontSize: 12, cursor: "pointer", fontFamily:"'Inter',system-ui,sans-serif", fontWeight:600 }}
             onClick={async () => { setUsuario(null); await cerrarSesion(); }}>Salir →</button>
         </div>
       </header>
@@ -873,31 +881,29 @@ export default function App() {
       <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
         {/* Sidebar */}
         <nav onMouseEnter={() => setSidebarHover(true)} onMouseLeave={() => setSidebarHover(false)}
-          style={{ width: W, background: "#18181b", color: "#fff", display: "flex", flexDirection: "column", flexShrink: 0, transition: "width .2s ease", overflow: "hidden", position: "relative", zIndex: 5, borderRight: "1px solid #27272a" }}>
+          style={{ width: W, background: "#09090b", color: "#fff", display: "flex", flexDirection: "column", flexShrink: 0, transition: "width .3s cubic-bezier(0.4, 0, 0.2, 1)", overflow: "hidden", position: "relative", zIndex: 5, borderRight: "1px solid rgba(255,255,255,0.05)", padding: "12px 8px" }}>
           {NAV_MAIN.map((n) => (
-            <button key={n.id} onClick={() => irSeccion(n.id)} title={!sidebarExpandido ? n.label : ""}
-              style={{ display: "flex", alignItems: "center", gap: 10, padding: sidebarExpandido ? "12px 20px" : "14px 0", justifyContent: sidebarExpandido ? "flex-start" : "center",
-                border: "none", background: seccion === n.id ? "#27272a" : "transparent",
+            <button key={n.id} className={`nav-item ${seccion === n.id ? 'nav-item-active' : ''}`} onClick={() => irSeccion(n.id)} title={!sidebarExpandido ? n.label : ""}
+              style={{ display: "flex", alignItems: "center", gap: 12, padding: sidebarExpandido ? "12px 16px" : "14px 0", justifyContent: sidebarExpandido ? "flex-start" : "center",
+                border: "none", background: "transparent",
                 color: seccion === n.id ? "#ffffff" : "#a1a1aa", fontSize: 14,
-                fontWeight: seccion === n.id ? 700 : 400, cursor: "pointer",
-                borderLeft: sidebarExpandido && seccion === n.id ? "3px solid #ffffff" : sidebarExpandido ? "3px solid transparent" : "none",
-                textAlign: "left", position: "relative", whiteSpace: "nowrap" }}>
-              <span style={{ fontSize: sidebarExpandido ? 16 : 18 }}>{n.icono}</span>
+                fontWeight: seccion === n.id ? 600 : 500, cursor: "pointer",
+                textAlign: "left", position: "relative", whiteSpace: "nowrap", marginBottom: 4 }}>
+              <span style={{ fontSize: sidebarExpandido ? 18 : 20 }}>{n.icono}</span>
               {sidebarExpandido && <span>{n.label}</span>}
-              {n.badge > 0 && sidebarExpandido && <span style={{ marginLeft: "auto", background: "#ffffff", color: "#18181b", borderRadius: 4, fontSize: 11, fontWeight: 800, padding: "1px 7px" }}>{n.badge}</span>}
-              {n.badge > 0 && !sidebarExpandido && <span style={{ position: "absolute", top: 8, right: 6, background: "#ffffff", color: "#18181b", borderRadius: 4, fontSize: 9, fontWeight: 800, padding: "1px 4px" }}>{n.badge}</span>}
+              {n.badge > 0 && sidebarExpandido && <span style={{ marginLeft: "auto", background: "#3b82f6", color: "#ffffff", borderRadius: 12, fontSize: 11, fontWeight: 700, padding: "2px 8px", boxShadow: "0 2px 4px rgba(59, 130, 246, 0.3)" }}>{n.badge}</span>}
+              {n.badge > 0 && !sidebarExpandido && <span style={{ position: "absolute", top: 8, right: 6, background: "#3b82f6", color: "#ffffff", borderRadius: 12, fontSize: 9, fontWeight: 700, padding: "1px 5px", boxShadow: "0 2px 4px rgba(59, 130, 246, 0.3)" }}>{n.badge}</span>}
             </button>
           ))}
           <div style={{ flex: 1 }} />
-          <div style={{ borderTop: "1px solid rgba(255,255,255,.1)", margin: "2px 0" }} />
+          <div style={{ borderTop: "1px solid rgba(255,255,255,.05)", margin: "8px 4px" }} />
           {NAV_BOTTOM.map((n) => (
-            <button key={n.id} onClick={() => irSeccion(n.id)} title={!sidebarExpandido ? n.label : ""}
-              style={{ display: "flex", alignItems: "center", gap: 10, padding: sidebarExpandido ? "10px 20px" : "12px 0", justifyContent: sidebarExpandido ? "flex-start" : "center",
-                border: "none", background: seccion === n.id ? "#27272a" : "transparent",
+            <button key={n.id} className={`nav-item ${seccion === n.id ? 'nav-item-active' : ''}`} onClick={() => irSeccion(n.id)} title={!sidebarExpandido ? n.label : ""}
+              style={{ display: "flex", alignItems: "center", gap: 12, padding: sidebarExpandido ? "12px 16px" : "14px 0", justifyContent: sidebarExpandido ? "flex-start" : "center",
+                border: "none", background: "transparent",
                 color: seccion === n.id ? "#ffffff" : "#a1a1aa", fontSize: 13,
-                fontWeight: seccion === n.id ? 700 : 400, cursor: "pointer",
-                borderLeft: sidebarExpandido && seccion === n.id ? "3px solid #ffffff" : sidebarExpandido ? "3px solid transparent" : "none",
-                textAlign: "left", position: "relative", whiteSpace: "nowrap" }}>
+                fontWeight: seccion === n.id ? 600 : 500, cursor: "pointer",
+                textAlign: "left", position: "relative", whiteSpace: "nowrap", marginBottom: 4 }}>
               <span style={{ fontSize: sidebarExpandido ? 15 : 17 }}>{n.icono}</span>
               {sidebarExpandido && <span>{n.label}</span>}
             </button>
