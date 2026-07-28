@@ -633,6 +633,14 @@ export default function App() {
   const [sidebarAbierto, setSidebarAbierto] = useState(false);
   const [sidebarHover, setSidebarHover] = useState(false);
 
+  // Salvaguarda de UX: una falla de red/Auth nunca debe dejar la app
+  // indefinidamente en la pantalla de carga.
+  useEffect(() => {
+    if (!cargando) return undefined;
+    const watchdog = window.setTimeout(() => setCargando(false), 12_000);
+    return () => window.clearTimeout(watchdog);
+  }, [cargando]);
+
   useEffect(() => {
     (async () => {
       // Esperar a que Supabase esté disponible (max 5 segundos)
@@ -644,19 +652,14 @@ export default function App() {
         // Escuchar cambios de auth (callback OAuth, magic link, etc.)
         const sb = getSB();
         if (sb) {
-          sb.auth.onAuthStateChange(async (event, session) => {
-            if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session?.user) {
-              const email = session.user.email;
-              const lista = await cargarUsuarios(null);
-              setTodosUsuarios(lista);
-              const perfil = lista.find(u => u.correo?.toLowerCase() === email?.toLowerCase());
-              if (perfil) {
-                const u = { ...perfil, id: session.user.id, _authId: session.user.id };
-                setUsuario(u);
-                await guardarSesion(u);
-                // Reiniciar la carga con la sesión autenticada; evita consultas anónimas.
+          sb.auth.onAuthStateChange((event, session) => {
+            if (event === "SIGNED_IN" && session?.user) {
+              // No ejecutar consultas de Supabase dentro de onAuthStateChange:
+              // el cliente mantiene un bloqueo interno mientras procesa el evento.
+              // Diferir la recarga permite que la sesión termine de persistirse.
+              window.setTimeout(() => {
                 window.location.reload();
-              }
+              }, 0);
             }
           });
         }
