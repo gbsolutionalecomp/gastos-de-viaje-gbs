@@ -92,7 +92,7 @@ const safeStorage = {
 // CAPA DE DATOS — Supabase via npm (estable, sin CDN)
 // ================================================================
 const SB_URL  = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const SB_ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const SB_ANON = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
 // Cliente Supabase creado una sola vez al cargar el módulo — no depende de CDN
 let __sbClient = null;
@@ -444,7 +444,9 @@ async function cargarSesion() {
           correo: email, rol: null, _sinPerfil: true };
       }
     }
-    // Fallback localStorage (desarrollo local sin Supabase)
+    // En producción nunca aceptar una identidad guardada en el navegador.
+    if (enProduccion()) return null;
+    // Fallback localStorage únicamente para desarrollo/demo local.
     const r = await safeStorage.get("gv-sesion");
     return r ? JSON.parse(r.value) : null;
   } catch { return null; }
@@ -649,32 +651,21 @@ export default function App() {
               setTodosUsuarios(lista);
               const perfil = lista.find(u => u.correo?.toLowerCase() === email?.toLowerCase());
               if (perfil) {
-                // Si el id del perfil no coincide con auth.uid(), sincronizarlo
-                if (perfil.id !== session.user.id) {
-                  try {
-                    const sbInner = getSB();
-                    if (sbInner) {
-                      // Actualizar el registro existente al auth.uid() correcto
-                      await sbInner.from("usuarios")
-                        .update({ id: session.user.id })
-                        .eq("correo", email.toLowerCase());
-                      // También actualizar expedientes que tenían el id viejo
-                      await sbInner.from("expedientes")
-                        .update({ solicitante_id: session.user.id })
-                        .eq("solicitante_id", perfil.id);
-                      console.log("[Auth] id sincronizado:", perfil.id, "->", session.user.id);
-                    }
-                  } catch(e) { console.warn("[Auth] No se pudo sincronizar id:", e.message); }
-                }
                 const u = { ...perfil, id: session.user.id, _authId: session.user.id };
                 setUsuario(u);
                 await guardarSesion(u);
-                if (!empresaId && lista.length) setEmpresaId(perfil.empresaId || lista[0]?.id || null);
+                // Reiniciar la carga con la sesión autenticada; evita consultas anónimas.
+                window.location.reload();
               }
             }
           });
         }
         const sesionGuardada = await cargarSesion();
+        if (!sesionGuardada && enProduccion()) {
+          // No consultar tablas protegidas hasta tener una sesión real.
+          setCargando(false);
+          return;
+        }
         if (sesionGuardada) {
           try {
             const usrsGuardados = await cargarUsuarios(null);
@@ -851,7 +842,7 @@ export default function App() {
               </div>
           }
           <span style={{ color: "rgba(255,255,255,0.15)", fontSize: 20, fontWeight: 300, flexShrink:0, marginLeft: 4 }}>|</span>
-          <span style={{ fontWeight: 600, fontSize: 14, color: "#a1a1aa", whiteSpace: "nowrap", letterSpacing:"-0.01em" }}>Gastos de Viaje <span style={{fontSize:10,opacity:.6, marginLeft: 4, background: "rgba(255,255,255,0.1)", padding: "2px 6px", borderRadius: 10}}>v2.1</span></span>
+          <span style={{ fontWeight: 600, fontSize: 14, color: "#a1a1aa", whiteSpace: "nowrap", letterSpacing:"-0.01em" }}>Gastos de Viaje <span style={{fontSize:10,opacity:.6, marginLeft: 4, background: "rgba(255,255,255,0.1)", padding: "2px 6px", borderRadius: 10}}>v2.3</span></span>
         </div>
         {/* Empresa selector */}
         {empresas.length > 1 && (
@@ -1733,7 +1724,8 @@ function RolChip({ rol }) {
 
 function Login({ onEntrar }) {
   const [modo, setModo]     = useState("cargando"); // cargando | inicio | magic-enviado | sin-perfil | primer-admin
-  const [tabLogin, setTabLogin] = useState("directo"); // directo | correo
+  const demoDisponible = !enProduccion() || process.env.NEXT_PUBLIC_ENABLE_DEMO_ACCESS === "true";
+  const [tabLogin, setTabLogin] = useState(demoDisponible ? "directo" : "correo"); // directo | correo
   const [correo, setCorreo] = useState("");
   const [cargandoOAuth, setCargandoOAuth] = useState("");
   const [aviso, setAviso]   = useState("");
@@ -1751,6 +1743,12 @@ function Login({ onEntrar }) {
             const lista = await cargarUsuarios(null);
             const perfil = lista.find(u => u.correo?.toLowerCase() === email?.toLowerCase());
             if (perfil) { onEntrar({ ...perfil, _authId: session.user.id }); return; }
+            if (enProduccion()) {
+              try { await sb.auth.signOut(); } catch {}
+              setDatosAuth({ email });
+              setModo("sin-perfil");
+              return;
+            }
             const hayAdmin = lista.some(u => u.rol === "Administrador");
             if (!hayAdmin) {
               setDatosAuth({ email, nombre: session.user.user_metadata?.full_name || email.split("@")[0], _authId: session.user.id });
@@ -1772,6 +1770,10 @@ function Login({ onEntrar }) {
   }, []);
 
   const entrarDirectoRol = (rol, nombre, correoDemo) => {
+    if (!demoDisponible) {
+      setAviso("El acceso de demostración está deshabilitado en producción.");
+      return;
+    }
     const usr = {
       id: uid(),
       nombre,
@@ -1807,7 +1809,7 @@ function Login({ onEntrar }) {
   };
 
   return (
-    <div style={{ ...S.font, minHeight:"100vh", display:"flex", background:"#0a0a0a" }}>
+    <div className="login-shell" style={{ ...S.font, minHeight:"100vh", display:"flex", background:"#0a0a0a" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
@@ -1817,10 +1819,16 @@ function Login({ onEntrar }) {
         .login-input:focus { border-color: #52525b !important; box-shadow: 0 0 0 3px rgba(82,82,91,0.12) !important; }
         .feature-row { transition: transform .2s ease; }
         .feature-row:hover { transform: translateX(4px); }
+        @media (max-width: 840px) {
+          .login-shell { display:block !important; background:#fafafa !important; }
+          .login-brand { display:none !important; }
+          .login-form-panel { min-height:100vh; padding:28px 20px !important; align-items:flex-start !important; }
+          .login-form-card { width:100% !important; max-width:440px; margin:42px auto 0; }
+        }
       `}</style>
 
       {/* Panel izquierdo — marca premium */}
-      <div style={{ flex:"0 0 440px", display:"flex", flexDirection:"column", justifyContent:"space-between",
+      <div className="login-brand" style={{ flex:"0 0 440px", display:"flex", flexDirection:"column", justifyContent:"space-between",
         padding:"56px 48px", position:"relative", overflow:"hidden",
         background:"linear-gradient(160deg, #18181b 0%, #0a0a0a 100%)",
         borderRight:"1px solid #27272a" }}>
@@ -1862,14 +1870,14 @@ function Login({ onEntrar }) {
         </div>
 
         <div style={{ fontSize:11, color:"#3f3f46", letterSpacing:"0.04em", position:"relative", zIndex:1 }}>
-          GBS Solutions · Sistema interno · v2.1
+          GBS Solutions · Sistema interno · v2.3
         </div>
       </div>
 
       {/* Panel derecho — formulario */}
-      <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center",
+      <div className="login-form-panel" style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center",
         background:"#fafafa", padding:40 }}>
-        <div style={{ width:420, boxSizing:"border-box", animation:"fadeIn .4s ease" }}>
+        <div className="login-form-card" style={{ width:420, boxSizing:"border-box", animation:"fadeIn .4s ease" }}>
           <div style={{ marginBottom:32 }}>
             <div style={{ fontWeight:800, fontSize:24, color:"#09090b", letterSpacing:"-0.03em", marginBottom:6 }}>
               Iniciar sesión
@@ -1880,7 +1888,7 @@ function Login({ onEntrar }) {
           </div>
 
           {/* Tabs */}
-          <div style={{ display:"flex", gap:4, marginBottom:24, background:"#f4f4f5", borderRadius:10, padding:4 }}>
+          {demoDisponible && <div style={{ display:"flex", gap:4, marginBottom:24, background:"#f4f4f5", borderRadius:10, padding:4 }}>
             <button className="login-btn" style={{ flex:1, fontSize:12.5, fontWeight:600, cursor:"pointer", padding:"8px",
               borderRadius:7, border:"none", transition:"all .18s ease",
               background: tabLogin === "directo" ? "#ffffff" : "transparent",
@@ -1897,7 +1905,7 @@ function Login({ onEntrar }) {
               onClick={() => setTabLogin("correo")}>
               Código por Correo
             </button>
-          </div>
+          </div>}
 
           {modo === "cargando" && (
             <div style={{ textAlign:"center", color:"#71717a", padding:"50px 0" }}>
@@ -1949,7 +1957,7 @@ function Login({ onEntrar }) {
                   Enviar enlace de acceso →
                 </button>
                 {aviso && <div style={{ fontSize:12.5, color:"#52525b", background:"#f4f4f5", padding:"10px 14px", borderRadius:8, lineHeight:1.5 }}>{aviso}</div>}
-                {otpFallido && (
+                {otpFallido && demoDisponible && (
                   <div style={{ marginTop:6, display:"grid", gap:8 }}>
                     <div style={{ fontSize:11, color:"#a1a1aa", fontWeight:600, letterSpacing:"0.06em" }}>ACCESO RÁPIDO DISPONIBLE:</div>
                     <button className="login-btn-outline" style={{ ...S.btn(false), fontSize:13 }}
@@ -1976,10 +1984,6 @@ function Login({ onEntrar }) {
                 Enviamos un enlace de acceso a<br/>
                 <strong style={{color:"#18181b", fontWeight:600}}>{correo}</strong>
               </div>
-              <button className="login-btn" style={{ ...S.btn(true), width:"100%", padding:"12px", fontSize:14, borderRadius:10, marginBottom:12, transition:"all .18s ease" }}
-                onClick={() => entrarDirectoRol("Administrador", "Laura Méndez", correo)}>
-                Ingresar directo ahora →
-              </button>
               <button style={{ border:"none", background:"none", color:"#a1a1aa",
                 cursor:"pointer", fontSize:13, textDecoration:"none", fontFamily:"'Inter', system-ui, sans-serif" }}
                 onClick={() => { setModo("inicio"); setAviso(""); }}>
@@ -1997,10 +2001,9 @@ function Login({ onEntrar }) {
               <div style={{ fontSize:14, color:"#71717a", lineHeight:1.7, marginBottom:28 }}>
                 El correo <strong style={{ color:"#18181b" }}>{datosAuth?.email}</strong> aún no está registrado.
               </div>
-              <button className="login-btn" style={{ ...S.btn(true), width:"100%", padding:"12px", fontSize:14, borderRadius:10, transition:"all .18s ease" }}
-                onClick={() => entrarDirectoRol("Administrador", "Administrador GBS", datosAuth?.email || "admin@gbsolution.mx")}>
-                Ingresar como Administrador →
-              </button>
+              <div style={{ fontSize:13, color:"#52525b", background:"#f4f4f5", padding:"12px 14px", borderRadius:10, lineHeight:1.6 }}>
+                Solicita al Administrador que active tu perfil. Por seguridad, este acceso no asigna roles automáticamente.
+              </div>
             </div>
           )}
 
@@ -2012,7 +2015,7 @@ function Login({ onEntrar }) {
 
           <div style={{ marginTop:32, paddingTop:20, borderTop:"1px solid #f4f4f5",
             textAlign:"center", fontSize:11.5, color:"#d4d4d8", letterSpacing:"0.02em" }}>
-            GBS Solutions · Sistema interno · v2.1-jul16
+            GBS Solutions · Sistema interno · Arquitectura v2.3
           </div>
         </div>
       </div>

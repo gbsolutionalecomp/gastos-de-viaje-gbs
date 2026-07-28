@@ -68,7 +68,7 @@ gastos-viaje-main/
 ## ⚙️ Configuración e Instalación
 
 ### 1. Requisitos Previos
-- Node.js >= 20.x
+- Node.js >= 22.x
 - npm / pnpm / yarn
 
 ### 2. Clonar e Instalar Dependencias
@@ -84,6 +84,11 @@ Copia `.env.example` a `.env.local`:
 cp .env.example .env.local
 ```
 Edita `.env.local` y asigna las credenciales de Supabase y Resend.
+
+En producción, el acceso requiere una sesión real de Supabase Auth. Los perfiles
+de demostración sólo están disponibles en desarrollo local, salvo que se habiliten
+explícitamente con `NEXT_PUBLIC_ENABLE_DEMO_ACCESS=true` en un entorno aislado y
+sin datos reales.
 
 ---
 

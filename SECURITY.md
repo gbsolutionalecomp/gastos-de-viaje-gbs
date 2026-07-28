@@ -1,6 +1,16 @@
 # Seguridad y salida a producción
 
-Este prototipo no debe conectarse a datos reales hasta completar la migración a Supabase Auth y aplicar `005_tarjetas_seguridad.sql` en un entorno de prueba.
+La aplicación usa Supabase Auth y RLS multiempresa. Antes de conectar datos reales,
+aplica y valida en orden `005_tarjetas_seguridad.sql` y
+`006_compatibilidad_produccion.sql` en un entorno de prueba.
+
+En producción no se permite autenticar mediante perfiles guardados en
+`localStorage`, ni asignar automáticamente el rol Administrador a un correo sin
+perfil. El acceso directo sólo existe para desarrollo local o una demo aislada.
+
+La aplicación no consulta tablas protegidas hasta que Supabase confirma una sesión
+válida. Mantén `SUPABASE_SERVICE_ROLE_KEY` exclusivamente en el servidor y nunca
+la expongas con el prefijo `NEXT_PUBLIC_`.
 
 ## Controles obligatorios
 
